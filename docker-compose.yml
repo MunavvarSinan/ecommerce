@@ -11,7 +11,7 @@ services:
       - ./apps/server:/app/apps/server
       - /app/apps/server/node_modules
     environment:
-      DATABASE_URL: mysql://n878pk0q8dimahd8obqc:pscale_pw_qTeerTJmqgoieDVgnFt1emDx1lhKBs5hEPBii594AZe@aws.connect.psdb.cloud/ecommerce?sslaccept=strict
+      DATABASE_URL: 
       NODE_ENV: development
       PORT: 8080
       JWT_SECRET: secret
