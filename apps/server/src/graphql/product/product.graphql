@@ -1,0 +1,18 @@
+#import Category from '../category/category.graphql'
+#import Store from '../store/schema.graphql'
+
+scalar DateTime
+
+type Product {
+  id: String!
+  name: String!
+  description: String!
+  price: Float!
+  image: String!
+  categoryId: String!
+  category: Category!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  store: Store
+  storeId: String
+}

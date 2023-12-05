@@ -1,0 +1,22 @@
+{
+    "env": {
+        "target": {
+            "node": 18
+        }
+    },
+    "jsc": {
+        "parser": {
+            "syntax": "typescript"
+        },
+        "baseUrl": "./",
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ]
+        }
+    },
+    "module": {
+        "type": "commonjs"
+    },
+    "sourceMaps": "inline"
+}

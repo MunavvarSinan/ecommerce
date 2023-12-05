@@ -1,0 +1,31 @@
+#import Store from '../store/schema.graphql'
+
+type Vendor {
+  id: String!
+  name: String!
+  email: String!
+  phone: String!
+  passwordHash: String!
+  role: String!
+  stores: [Store!]
+}
+
+type Query {
+  vendors: [Vendor!]!
+  vendor(id: String!): Vendor!
+}
+
+type Mutation {
+  vendorLogin(email: String!, password: String!): AuthResult!
+  updateVendor(
+    id: String!
+    email: String!
+    phone: String!
+    password: String!
+  ): Vendor!
+  deleteVendor(id: String!): Vendor!
+}
+
+type AuthResult {
+  authToken: String!
+}

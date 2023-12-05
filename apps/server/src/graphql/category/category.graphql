@@ -1,0 +1,10 @@
+#import Product from '../product/product.graphql'
+scalar DateTime
+
+type Category {
+  id: String!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  products: [Product!]
+}

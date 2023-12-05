@@ -1,0 +1,61 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "rimraf dist && swc ./src -d dist",
+    "start": "node dist/index.js",
+    "dev": "concurrently \"npm run watch-compile\" \"npm run watch-dev\"",
+    "watch-compile": "swc src -w --out-dir dist",
+    "watch-dev": "nodemon --watch \"dist/**/*\" -e js ./dist/index.js",
+    "generate": "graphql-codegen",
+    "watch": "watchy --no-init-spawn --debounce 1 -w src -- docker compose restart server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.9.4",
+    "@graphql-tools/load-files": "^7.0.0",
+    "@prisma/client": "^5.4.2",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "graphql": "^16.8.1",
+    "graphql-iso-date": "^3.6.1",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "morgan": "^1.10.0",
+    "nanoid": "^3.3.7",
+    "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/typescript": "^4.0.1",
+    "@graphql-codegen/typescript-resolvers": "^4.0.1",
+    "@swc/cli": "^0.1.62",
+    "@swc/core": "^1.3.94",
+    "@tsconfig/node18": "^18.2.2",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.15",
+    "@types/express": "^4.17.20",
+    "@types/graphql-iso-date": "^3.4.3",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/lodash": "^4.14.200",
+    "@types/morgan": "^1.9.7",
+    "@types/node": "^20.8.7",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "@typescript-eslint/parser": "^6.8.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.52.0",
+    "nodemon": "^3.0.1",
+    "prisma": "^5.4.2",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.1",
+    "watchy": "^0.10.1"
+  },
+  "volta": {
+    "node": "18.18.2"
+  }
+}

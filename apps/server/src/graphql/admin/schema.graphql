@@ -1,0 +1,63 @@
+#import Vendor from '../vendor/schema.graphql'
+#import Category from '../category/category.graphql'
+#import Product from '../product/product.graphql'
+
+type Admin {
+  id: ID!
+  name: String!
+  email: String!
+  phone: String!
+  role: String!
+  passwordHash: String!
+}
+input ProductInput {
+  name: String!
+  description: String!
+  price: Float!
+  quantity: Int!
+  image: String!
+}
+type Mutation {
+  adminLogin(email: String!, password: String!): Admin!
+  createVendor(
+    name: String!
+    email: String!
+    phone: String!
+    password: String!
+  ): Vendor!
+  createAdmin(
+    name: String!
+    phone: String!
+    email: String!
+    password: String!
+  ): Admin!
+  createCategory(name: String!, products: [ProductInput!]): Category!
+  #   createStore(
+  #     name: String!
+  #     address: String!
+  #     phone: String!
+  #     email: String!
+  #     password: String!
+  #   ): Store!
+  #   createCategory(name: String!): Category!
+  #   createProduct(
+  #     name: String!
+  #     description: String!
+  #     price: Float!
+  #     quantity: Int!
+  #     storeId: ID!
+  #   ): Product!
+}
+
+type Query {
+  getAdmins: [Admin!]!
+  getAdmin(id: ID!): Admin!
+  getVendors: [Vendor!]!
+  getVendor(id: ID!): Vendor!
+  #   getCategories: [Category!]!
+  #   getCategory(id: ID!): Category!
+  #   getStores: [Store!]!
+  #   getStore(id: ID!): Store!
+  #   getProducts: [Product!]!
+  #   getProduct(id: ID!): Product!
+}

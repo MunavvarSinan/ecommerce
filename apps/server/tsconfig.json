@@ -1,0 +1,30 @@
+{
+    "extends": "@tsconfig/node18/tsconfig.json",
+    "compilerOptions": {
+        "module": "commonjs",
+        "lib": [
+            "esnext"
+        ],
+        "moduleResolution": "node",
+        "outDir": "dist",
+        "baseUrl": "./",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ]
+        },
+        "plugins": [
+            {
+                "transform": "typescript-transform-paths"
+            },
+        ]
+    },
+    "include": [
+        "src",
+        "scripts"
+, "interfaces"    ],
+    "exclude": [
+        "node_modules",
+        "**/*.test.ts"
+    ]
+}

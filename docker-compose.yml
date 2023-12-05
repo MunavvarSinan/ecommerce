@@ -1,0 +1,17 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: ./apps/server/Dockerfile
+    restart: unless-stopped
+    ports:
+      - 8080:8080
+      - 9229:9229
+    volumes:
+      - ./apps/server:/app/apps/server
+      - /app/apps/server/node_modules
+    environment:
+      DATABASE_URL: mysql://n878pk0q8dimahd8obqc:pscale_pw_qTeerTJmqgoieDVgnFt1emDx1lhKBs5hEPBii594AZe@aws.connect.psdb.cloud/ecommerce?sslaccept=strict
+      NODE_ENV: development
+      PORT: 8080
+      JWT_SECRET: secret
