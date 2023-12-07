@@ -19,34 +19,9 @@ input ProductInput {
 }
 type Mutation {
   adminLogin(email: String!, password: String!): Admin!
-  createVendor(
-    name: String!
-    email: String!
-    phone: String!
-    password: String!
-  ): Vendor!
-  createAdmin(
-    name: String!
-    phone: String!
-    email: String!
-    password: String!
-  ): Admin!
+  createVendor(name: String!, email: String!, phone: String!, password: String!): Vendor!
+  createAdmin(name: String!, phone: String!, email: String!, password: String!): Admin!
   createCategory(name: String!, products: [ProductInput!]): Category!
-  #   createStore(
-  #     name: String!
-  #     address: String!
-  #     phone: String!
-  #     email: String!
-  #     password: String!
-  #   ): Store!
-  #   createCategory(name: String!): Category!
-  #   createProduct(
-  #     name: String!
-  #     description: String!
-  #     price: Float!
-  #     quantity: Int!
-  #     storeId: ID!
-  #   ): Product!
 }
 
 type Query {

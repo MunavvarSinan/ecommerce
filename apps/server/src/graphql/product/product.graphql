@@ -1,18 +1,69 @@
 #import Category from '../category/category.graphql'
-#import Store from '../store/schema.graphql'
+#import Vendor from '../vendor/schema.graphql'
 
 scalar DateTime
-
 type Product {
   id: String!
   name: String!
   description: String!
   price: Float!
-  image: String!
-  categoryId: String!
+  isFeatured: Boolean!
+  isArchived: Boolean!
+  stockQuantity: Int!
+  inStock: Boolean!
   category: Category!
+  vendor: Vendor!
+  color: Color
+  size: Size
+  images: [Image!]!
   createdAt: DateTime!
   updatedAt: DateTime!
-  store: Store
-  storeId: String
+  orderItems: [OrderItem!]!
+}
+
+type Order {
+  id: String!
+  vendorId: String!
+  vendor: Vendor!
+  orderItems: [OrderItem!]!
+  isPaid: Boolean!
+  phone: String!
+  address: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type OrderItem {
+  id: String!
+  orderId: String!
+  order: Order!
+  productId: String!
+  product: Product!
+}
+
+type Size {
+  id: String!
+  name: String!
+  value: String!
+  products: [Product!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Color {
+  id: String!
+  name: String!
+  value: String!
+  products: [Product!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Image {
+  id: String!
+  productId: String!
+  product: Product!
+  url: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }

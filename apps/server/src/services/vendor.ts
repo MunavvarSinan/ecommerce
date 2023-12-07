@@ -29,7 +29,6 @@ class VendorService {
 
         const createdVendor = await db.vendors.create({
             data: { id, name, email, phone, passwordHash },
-            include: { stores: true },
         });
 
         return createdVendor;

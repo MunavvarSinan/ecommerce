@@ -8,71 +8,153 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Vendors {
+model User {
   id           String   @id
   name         String
   email        String   @unique
   phone        String   @unique
   passwordHash String
-  role         Role     @default(VENDOR)
+  role         Role     @default(BUYER)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  address      String
 
-  stores Store[]
+  @@map("users")
+}
 
-  @@map("vendor")
+model Vendor {
+  id           String    @id
+  name         String
+  email        String    @unique
+  phone        String    @unique
+  passwordHash String
+  role         Role      @default(VENDOR)
+  products     Product[] @relation("VendorToProduct")
+  address      String
+  orders       Order[]   @relation("VendorToOrder")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("vendors")
 }
 
 model Admin {
-  id           String   @id
+  id           String @id
   name         String
-  email        String   @unique
-  phone        String   @unique
+  email        String @unique
+  phone        String @unique
   passwordHash String
-  role         Role     @default(ADMIN)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  role         Role   @default(ADMIN)
+  address      String
 
-  @@map("admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admins")
 }
 
 enum Role {
   ADMIN
   VENDOR
+  BUYER
 }
 
 model Category {
-  id        String    @id @default(uuid())
-  name      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Product   Product[]
+  id            String     @id
+  name          String
+  parentId      String?
+  parent        Category?  @relation("Subcategories", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  subcategories Category[] @relation("Subcategories")
 
+  Product Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([parentId])
   @@map("categories")
 }
 
-model Store {
-  id        String    @id
-  vendorId  String    @unique
-  vendor    Vendors   @relation(fields: [vendorId], references: [id])
-  name      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  products  Product[]
+model Product {
+  id            String  @id
+  name          String
+  description   String
+  price         Float
+  isFeatured    Boolean @default(false)
+  isArchived    Boolean @default(false)
+  stockQuantity Int     @default(0)
+  inStock       Boolean @default(true)
+
+  categoryId String   @unique
+  category   Category @relation(fields: [categoryId], references: [id])
+  vendorId   String   @unique
+  vendor     Vendor   @relation("VendorToProduct", fields: [vendorId], references: [id])
+  color      Color?   @relation(fields: [colorId], references: [id])
+  colorId    String?
+  size       Size?    @relation(fields: [sizeId], references: [id])
+  sizeId     String?
+  images     Image[]
+
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  OrderItem OrderItem[]
+
+  @@index([colorId])
+  @@index([sizeId])
+  @@map("products")
 }
 
-model Product {
-  id          String   @id @default(uuid())
-  name        String
-  description String
-  price       Float
-  image       String
-  categoryId  String   @unique
-  category    Category @relation(fields: [categoryId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  Store       Store?   @relation(fields: [storeId], references: [id])
-  storeId     String?  @unique
+model Order {
+  id         String      @id
+  ventorId   String
+  vendor     Vendor      @relation("VendorToOrder", fields: [ventorId], references: [id])
+  orderItems OrderItem[] // Relation to OrderItem model
+  isPaid     Boolean     @default(false)
+  phone      String      @default("")
+  address    String      @default("")
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 
-  @@map("products")
+  @@index([ventorId])
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String // Foreign Key to Order
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String // Foreign Key to Product
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model Size {
+  id        String    @id
+  name      String
+  value     String
+  products  Product[] // Relation to Product model
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Color {
+  id        String    @id
+  name      String
+  value     String
+  products  Product[] // Relation to Product model
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Image {
+  id        String   @id
+  productId String // Foreign Key to Product
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String // URL of the image
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
 }

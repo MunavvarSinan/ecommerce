@@ -1,4 +1,6 @@
-#import Store from '../store/schema.graphql'
+#import Product from '../product/product.graphql'
+#import Order from '../product/product.graphql'
+scalar DateTime
 
 type Vendor {
   id: String!
@@ -7,7 +9,11 @@ type Vendor {
   phone: String!
   passwordHash: String!
   role: String!
-  stores: [Store!]
+  products: [Product!]
+  address: String!
+  orders: [Order!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Query {
@@ -17,15 +23,12 @@ type Query {
 
 type Mutation {
   vendorLogin(email: String!, password: String!): AuthResult!
-  updateVendor(
-    id: String!
-    email: String!
-    phone: String!
-    password: String!
-  ): Vendor!
+  updateVendor(id: String!, email: String!, phone: String!, password: String!): Vendor!
   deleteVendor(id: String!): Vendor!
 }
 
 type AuthResult {
   authToken: String!
 }
+
+

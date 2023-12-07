@@ -37,8 +37,31 @@ export type Category = {
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['String']['output'];
   name: Scalars['String']['output'];
-  products?: Maybe<Array<Product>>;
+  parent?: Maybe<Category>;
+  parentId?: Maybe<Scalars['String']['output']>;
+  products: Array<Product>;
+  subcategories?: Maybe<Array<Category>>;
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type Color = {
+  __typename?: 'Color';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  products: Array<Product>;
+  updatedAt: Scalars['DateTime']['output'];
+  value: Scalars['String']['output'];
+};
+
+export type Image = {
+  __typename?: 'Image';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['String']['output'];
+  product: Product;
+  productId: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  url: Scalars['String']['output'];
 };
 
 export type Mutation = {
@@ -46,12 +69,8 @@ export type Mutation = {
   adminLogin: Admin;
   createAdmin: Admin;
   createCategory: Category;
-  createStore: Store;
   createVendor: Vendor;
-  deleteAllStores: Array<Store>;
-  deleteStore: Store;
   deleteVendor: Vendor;
-  updateStore: Store;
   updateVendor: Vendor;
   vendorLogin: AuthResult;
 };
@@ -77,12 +96,6 @@ export type MutationCreateCategoryArgs = {
 };
 
 
-export type MutationCreateStoreArgs = {
-  name: Scalars['String']['input'];
-  vendorId: Scalars['String']['input'];
-};
-
-
 export type MutationCreateVendorArgs = {
   email: Scalars['String']['input'];
   name: Scalars['String']['input'];
@@ -91,21 +104,8 @@ export type MutationCreateVendorArgs = {
 };
 
 
-export type MutationDeleteStoreArgs = {
-  id: Scalars['ID']['input'];
-  vendorId: Scalars['String']['input'];
-};
-
-
 export type MutationDeleteVendorArgs = {
   id: Scalars['String']['input'];
-};
-
-
-export type MutationUpdateStoreArgs = {
-  id: Scalars['ID']['input'];
-  name: Scalars['String']['input'];
-  vendorId: Scalars['String']['input'];
 };
 
 
@@ -122,19 +122,46 @@ export type MutationVendorLoginArgs = {
   password: Scalars['String']['input'];
 };
 
+export type Order = {
+  __typename?: 'Order';
+  address: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['String']['output'];
+  isPaid: Scalars['Boolean']['output'];
+  orderItems: Array<OrderItem>;
+  phone: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  vendor: Vendor;
+  vendorId: Scalars['String']['output'];
+};
+
+export type OrderItem = {
+  __typename?: 'OrderItem';
+  id: Scalars['String']['output'];
+  order: Order;
+  orderId: Scalars['String']['output'];
+  product: Product;
+  productId: Scalars['String']['output'];
+};
+
 export type Product = {
   __typename?: 'Product';
   category: Category;
-  categoryId: Scalars['String']['output'];
+  color?: Maybe<Color>;
   createdAt: Scalars['DateTime']['output'];
   description: Scalars['String']['output'];
   id: Scalars['String']['output'];
-  image: Scalars['String']['output'];
+  images: Array<Image>;
+  inStock: Scalars['Boolean']['output'];
+  isArchived: Scalars['Boolean']['output'];
+  isFeatured: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
+  orderItems: Array<OrderItem>;
   price: Scalars['Float']['output'];
-  store?: Maybe<Store>;
-  storeId?: Maybe<Scalars['String']['output']>;
+  size?: Maybe<Size>;
+  stockQuantity: Scalars['Int']['output'];
   updatedAt: Scalars['DateTime']['output'];
+  vendor: Vendor;
 };
 
 export type ProductInput = {
@@ -151,8 +178,6 @@ export type Query = {
   getAdmins: Array<Admin>;
   getVendor: Vendor;
   getVendors: Array<Vendor>;
-  store: Store;
-  stores: Array<Store>;
   vendor: Vendor;
   vendors: Array<Vendor>;
 };
@@ -168,40 +193,33 @@ export type QueryGetVendorArgs = {
 };
 
 
-export type QueryStoreArgs = {
-  id: Scalars['ID']['input'];
-  vendorId: Scalars['String']['input'];
-};
-
-
-export type QueryStoresArgs = {
-  vendorId: Scalars['String']['input'];
-};
-
-
 export type QueryVendorArgs = {
   id: Scalars['String']['input'];
 };
 
-export type Store = {
-  __typename?: 'Store';
+export type Size = {
+  __typename?: 'Size';
   createdAt: Scalars['DateTime']['output'];
   id: Scalars['String']['output'];
   name: Scalars['String']['output'];
-  products?: Maybe<Array<Product>>;
+  products: Array<Product>;
   updatedAt: Scalars['DateTime']['output'];
-  vendorId: Scalars['String']['output'];
+  value: Scalars['String']['output'];
 };
 
 export type Vendor = {
   __typename?: 'Vendor';
+  address: Scalars['String']['output'];
+  createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
   id: Scalars['String']['output'];
   name: Scalars['String']['output'];
+  orders?: Maybe<Array<Order>>;
   passwordHash: Scalars['String']['output'];
   phone: Scalars['String']['output'];
+  products?: Maybe<Array<Product>>;
   role: Scalars['String']['output'];
-  stores?: Maybe<Array<Store>>;
+  updatedAt: Scalars['DateTime']['output'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -280,15 +298,19 @@ export type ResolversTypes = ResolversObject<{
   AuthResult: ResolverTypeWrapper<AuthResult>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Category: ResolverTypeWrapper<Category>;
+  Color: ResolverTypeWrapper<Color>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
+  Image: ResolverTypeWrapper<Image>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Mutation: ResolverTypeWrapper<{}>;
+  Order: ResolverTypeWrapper<Order>;
+  OrderItem: ResolverTypeWrapper<OrderItem>;
   Product: ResolverTypeWrapper<Product>;
   ProductInput: ProductInput;
   Query: ResolverTypeWrapper<{}>;
-  Store: ResolverTypeWrapper<Store>;
+  Size: ResolverTypeWrapper<Size>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Vendor: ResolverTypeWrapper<Vendor>;
 }>;
@@ -299,15 +321,19 @@ export type ResolversParentTypes = ResolversObject<{
   AuthResult: AuthResult;
   Boolean: Scalars['Boolean']['output'];
   Category: Category;
+  Color: Color;
   DateTime: Scalars['DateTime']['output'];
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
+  Image: Image;
   Int: Scalars['Int']['output'];
   Mutation: {};
+  Order: Order;
+  OrderItem: OrderItem;
   Product: Product;
   ProductInput: ProductInput;
   Query: {};
-  Store: Store;
+  Size: Size;
   String: Scalars['String']['output'];
   Vendor: Vendor;
 }>;
@@ -331,8 +357,21 @@ export type CategoryResolvers<ContextType = any, ParentType extends ResolversPar
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  products?: Resolver<Maybe<Array<ResolversTypes['Product']>>, ParentType, ContextType>;
+  parent?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType>;
+  parentId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  products?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
+  subcategories?: Resolver<Maybe<Array<ResolversTypes['Category']>>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ColorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Color'] = ResolversParentTypes['Color']> = ResolversObject<{
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  products?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -340,32 +379,65 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
+export type ImageResolvers<ContextType = any, ParentType extends ResolversParentTypes['Image'] = ResolversParentTypes['Image']> = ResolversObject<{
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  product?: Resolver<ResolversTypes['Product'], ParentType, ContextType>;
+  productId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  url?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   adminLogin?: Resolver<ResolversTypes['Admin'], ParentType, ContextType, RequireFields<MutationAdminLoginArgs, 'email' | 'password'>>;
   createAdmin?: Resolver<ResolversTypes['Admin'], ParentType, ContextType, RequireFields<MutationCreateAdminArgs, 'email' | 'name' | 'password' | 'phone'>>;
   createCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'name'>>;
-  createStore?: Resolver<ResolversTypes['Store'], ParentType, ContextType, RequireFields<MutationCreateStoreArgs, 'name' | 'vendorId'>>;
   createVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<MutationCreateVendorArgs, 'email' | 'name' | 'password' | 'phone'>>;
-  deleteAllStores?: Resolver<Array<ResolversTypes['Store']>, ParentType, ContextType>;
-  deleteStore?: Resolver<ResolversTypes['Store'], ParentType, ContextType, RequireFields<MutationDeleteStoreArgs, 'id' | 'vendorId'>>;
   deleteVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<MutationDeleteVendorArgs, 'id'>>;
-  updateStore?: Resolver<ResolversTypes['Store'], ParentType, ContextType, RequireFields<MutationUpdateStoreArgs, 'id' | 'name' | 'vendorId'>>;
   updateVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<MutationUpdateVendorArgs, 'email' | 'id' | 'password' | 'phone'>>;
   vendorLogin?: Resolver<ResolversTypes['AuthResult'], ParentType, ContextType, RequireFields<MutationVendorLoginArgs, 'email' | 'password'>>;
 }>;
 
+export type OrderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order']> = ResolversObject<{
+  address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  isPaid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  orderItems?: Resolver<Array<ResolversTypes['OrderItem']>, ParentType, ContextType>;
+  phone?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  vendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType>;
+  vendorId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type OrderItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrderItem'] = ResolversParentTypes['OrderItem']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  order?: Resolver<ResolversTypes['Order'], ParentType, ContextType>;
+  orderId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  product?: Resolver<ResolversTypes['Product'], ParentType, ContextType>;
+  productId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = ResolversObject<{
   category?: Resolver<ResolversTypes['Category'], ParentType, ContextType>;
-  categoryId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  color?: Resolver<Maybe<ResolversTypes['Color']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  image?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  images?: Resolver<Array<ResolversTypes['Image']>, ParentType, ContextType>;
+  inStock?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isArchived?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isFeatured?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  orderItems?: Resolver<Array<ResolversTypes['OrderItem']>, ParentType, ContextType>;
   price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
-  store?: Resolver<Maybe<ResolversTypes['Store']>, ParentType, ContextType>;
-  storeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  size?: Resolver<Maybe<ResolversTypes['Size']>, ParentType, ContextType>;
+  stockQuantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  vendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -374,30 +446,32 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getAdmins?: Resolver<Array<ResolversTypes['Admin']>, ParentType, ContextType>;
   getVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<QueryGetVendorArgs, 'id'>>;
   getVendors?: Resolver<Array<ResolversTypes['Vendor']>, ParentType, ContextType>;
-  store?: Resolver<ResolversTypes['Store'], ParentType, ContextType, RequireFields<QueryStoreArgs, 'id' | 'vendorId'>>;
-  stores?: Resolver<Array<ResolversTypes['Store']>, ParentType, ContextType, RequireFields<QueryStoresArgs, 'vendorId'>>;
   vendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<QueryVendorArgs, 'id'>>;
   vendors?: Resolver<Array<ResolversTypes['Vendor']>, ParentType, ContextType>;
 }>;
 
-export type StoreResolvers<ContextType = any, ParentType extends ResolversParentTypes['Store'] = ResolversParentTypes['Store']> = ResolversObject<{
+export type SizeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Size'] = ResolversParentTypes['Size']> = ResolversObject<{
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  products?: Resolver<Maybe<Array<ResolversTypes['Product']>>, ParentType, ContextType>;
+  products?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  vendorId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type VendorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Vendor'] = ResolversParentTypes['Vendor']> = ResolversObject<{
+  address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  orders?: Resolver<Maybe<Array<ResolversTypes['Order']>>, ParentType, ContextType>;
   passwordHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   phone?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  products?: Resolver<Maybe<Array<ResolversTypes['Product']>>, ParentType, ContextType>;
   role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  stores?: Resolver<Maybe<Array<ResolversTypes['Store']>>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -405,11 +479,15 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Admin?: AdminResolvers<ContextType>;
   AuthResult?: AuthResultResolvers<ContextType>;
   Category?: CategoryResolvers<ContextType>;
+  Color?: ColorResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
+  Image?: ImageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  Order?: OrderResolvers<ContextType>;
+  OrderItem?: OrderItemResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-  Store?: StoreResolvers<ContextType>;
+  Size?: SizeResolvers<ContextType>;
   Vendor?: VendorResolvers<ContextType>;
 }>;
 

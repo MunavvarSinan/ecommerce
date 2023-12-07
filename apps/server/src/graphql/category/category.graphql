@@ -4,7 +4,10 @@ scalar DateTime
 type Category {
   id: String!
   name: String!
+  parentId: String
+  parent: Category
+  subcategories: [Category!]
+  products: [Product!]!
   createdAt: DateTime!
   updatedAt: DateTime!
-  products: [Product!]
 }
