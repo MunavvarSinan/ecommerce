@@ -18,7 +18,7 @@ input ProductInput {
   image: String!
 }
 type Mutation {
-  adminLogin(email: String!, password: String!): Admin!
+  adminLogin(email: String!, password: String!): AuthResult!
   createVendor(name: String!, email: String!, phone: String!, password: String!): Vendor!
   createAdmin(name: String!, phone: String!, email: String!, password: String!): Admin!
   createCategory(name: String!, products: [ProductInput!]): Category!
@@ -35,4 +35,9 @@ type Query {
   #   getStore(id: ID!): Store!
   #   getProducts: [Product!]!
   #   getProduct(id: ID!): Product!
+}
+
+
+type AuthResult {
+  authToken: String!
 }

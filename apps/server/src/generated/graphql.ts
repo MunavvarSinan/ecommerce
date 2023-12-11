@@ -66,7 +66,7 @@ export type Image = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  adminLogin: Admin;
+  adminLogin: AuthResult;
   createAdmin: Admin;
   createCategory: Category;
   createVendor: Vendor;
@@ -390,7 +390,7 @@ export type ImageResolvers<ContextType = any, ParentType extends ResolversParent
 }>;
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  adminLogin?: Resolver<ResolversTypes['Admin'], ParentType, ContextType, RequireFields<MutationAdminLoginArgs, 'email' | 'password'>>;
+  adminLogin?: Resolver<ResolversTypes['AuthResult'], ParentType, ContextType, RequireFields<MutationAdminLoginArgs, 'email' | 'password'>>;
   createAdmin?: Resolver<ResolversTypes['Admin'], ParentType, ContextType, RequireFields<MutationCreateAdminArgs, 'email' | 'name' | 'password' | 'phone'>>;
   createCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'name'>>;
   createVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<MutationCreateVendorArgs, 'email' | 'name' | 'password' | 'phone'>>;

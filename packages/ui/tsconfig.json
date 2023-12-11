@@ -3,17 +3,17 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@ui/*": [
-        "./*"
+ 
+      "@components/ui*": [
+        "components/ui*"
       ],
-      "@ui/components/ui*": [
-        "./components/ui*"
+      "@lib/*": [
+        "lib/*"
       ]
     }
   },
   "include": [
-    "components",
-    "lib"
+    "."
   ],
   "exclude": [
     "node_modules",

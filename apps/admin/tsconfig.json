@@ -13,6 +13,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@ui/*": [
+        "../../packages/ui/src/*"
       ]
     }
   },
@@ -21,6 +24,7 @@
     "src/**/*.tsx",
     "tailwind.config.js",
     "next-env.d.ts",
-    ".next/types/**/*.ts"
-, "../../packages/ui/src/button.tsx"  ]
+    ".next/types/**/*.ts",
+    "../../packages/ui/src/button.tsx"
+  ]
 }

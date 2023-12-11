@@ -32,8 +32,7 @@ module.exports = {
     'react/react-in-jsx-scope': 'off',
     'import/no-default-export': 'off',
     "react/function-component-definition": "off",
-    'import/no-extraneous-dependencies': 'off'
-
+    'import/no-extraneous-dependencies': 'off',
   },
   settings: {
     "import/resolver": {

@@ -20,8 +20,10 @@ export function createAuthToken(user: Pick<Vendors | User, 'id'>): string {
 
 export function verifyAuthToken(authToken: string) {
     const { userId } = jwt.verify(authToken, process.env.JWT_SECRET as string) as { userId: string };
-    if (!userId) throw new GraphQLError('Invalid auth token');
-    return db.vendors.findUnique({ where: { id: userId } });
+    if (!userId) {
+        throw new GraphQLError('Invalid auth token');
+    }
+    return db.vendor.findUnique({ where: { id: userId } });
 
 }
 

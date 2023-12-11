@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import db, { genId } from "@/modules/db";
 import { SALT_ROUNDS } from "@/utils/constants";
 import { CreateAdminInput, CreateVendorInput } from "interfaces/admin";
+import { createAuthToken } from "@/utils/auth";
 
 class Admin {
     public static async getAdminByEmail(email: string) {
@@ -17,26 +18,38 @@ class Admin {
         const id = genId();
         const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
-        const createdAdmin = await db.admin.create({
+        return await db.admin.create({
             data: { id, name, email, phone, passwordHash },
         });
-
-        return createdAdmin;
     }
-    public static async createVendor({ name, email, password, phone }: CreateVendorInput) {
-        const foundVendor = await Admin.getAdminByEmail(email);
-        if (foundVendor) {
-            throw new GraphQLError(`Vendor with email ${email} already exists`);
+    public static async login({ email, password }: { email: string, password: string }) {
+        const foundAdmin = await Admin.getAdminByEmail(email);
+        if (!foundAdmin) {
+            throw new GraphQLError(`Email/Password combination is incorrect`);
         }
-        const id = genId();
-        const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
-        const createdVendor = await db.vendors.create({
-            data: { id, name, email, phone, passwordHash },
-        });
+        const isPasswordCorrect = await bcrypt.compare(password, foundAdmin.passwordHash);
 
-        return createdVendor;
+        if (!isPasswordCorrect) {
+            throw new GraphQLError('Email/Password combination is incorrect');
+        }
+        
+        return { authToken: createAuthToken(foundAdmin) };
     }
+    // public static async createVendor({ name, email, password, phone }: CreateVendorInput) {
+    //     const foundVendor = await Admin.getAdminByEmail(email);
+    //     if (foundVendor) {
+    //         throw new GraphQLError(`Vendor with email ${email} already exists`);
+    //     }
+    //     const id = genId();
+    //     const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+
+    //     const createdVendor = await db.vendor.create({
+    //         data: { id, name, email, phone, passwordHash },
+    //     });
+
+    //     return createdVendor;
+    // }
 }
 
 export default Admin;

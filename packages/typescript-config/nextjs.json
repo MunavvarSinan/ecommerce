@@ -13,11 +13,6 @@
     "declarationMap": false,
     "incremental": true,
     "jsx": "preserve",
-    "paths": {
-      "@ui/*": [
-        "../../packages/ui/*"
-      ],
-    },
     "lib": [
       "dom",
       "dom.iterable",

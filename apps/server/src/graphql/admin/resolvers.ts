@@ -11,17 +11,24 @@ const adminResolvers: Resolvers = {
     Mutation: {
         createAdmin: async (_, { name, phone, email, password }, context: GqlContext) => {
             await requireAuthorization({ context }, ['ADMIN']);
-            const admin = await Admin.createAdmin({ name, phone, email, password });
-            return admin;
+            return await Admin.createAdmin({ name, phone, email, password });
         },
-        createVendor: async (_, { name, email, phone, password }, context: GqlContext) => {
-            await requireAuthorization({ context }, ['ADMIN']);
-            const vendor = await Admin.createVendor({ name, email, phone, password });
-            return vendor;
+        adminLogin: async (_, { email, password }) => {
+            const admin = await Admin.login({ email, password });
+            if (admin) {
+                return admin; // Return the complete Admin object
+            } else {
+                throw new Error('Invalid login credentials');
+            }
         }
+        // createVendor: async (_, { name, email, phone, password }, context: GqlContext) => {
+        //     await requireAuthorization({ context }, ['ADMIN']);
+        //     const vendor = await Admin.createVendor({ name, email, phone, password });
+        //     return vendor;
+        // }
     },
     Query: {
-        
+
     }
 }
 
