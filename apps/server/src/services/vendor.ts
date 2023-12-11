@@ -17,7 +17,7 @@ export interface CreateUserInput {
 
 class VendorService {
     public static async getVendorByEmail(email: string) {
-        return await db.vendors.findUnique({ where: { email }, include: { stores: true } });
+        return await db.vendor.findUnique({ where: { email }, include: { stores: true } });
     }
     public static async createUser({ name, email, password, phone }: CreateUserInput) {
         const foundVendor = await VendorService.getVendorByEmail(email);
@@ -27,7 +27,7 @@ class VendorService {
         const id = genId();
         const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
-        const createdVendor = await db.vendors.create({
+        const createdVendor = await db.vendor.create({
             data: { id, name, email, phone, passwordHash },
         });
 

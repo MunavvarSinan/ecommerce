@@ -20,7 +20,8 @@ const adminResolvers: Resolvers = {
             } else {
                 throw new Error('Invalid login credentials');
             }
-        }
+        },
+
         // createVendor: async (_, { name, email, phone, password }, context: GqlContext) => {
         //     await requireAuthorization({ context }, ['ADMIN']);
         //     const vendor = await Admin.createVendor({ name, email, phone, password });
@@ -28,7 +29,11 @@ const adminResolvers: Resolvers = {
         // }
     },
     Query: {
+        getAdmins: async (_: any, __: any, context: GqlContext) => {
+            await requireAuthorization({ context }, ['ADMIN']);
+            return await Admin.getAdmins();
 
+        }
     }
 }
 

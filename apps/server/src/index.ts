@@ -44,8 +44,8 @@ const startServer = async () => {
                 return { currentUser: null, userRoles: [] };
             }
             try {
-                const vendor = await verifyAuthToken(authToken);
-                return { currentUser: vendor, userRoles: [vendor?.role] };
+                const user = await verifyAuthToken(authToken);
+                return { currentUser: user, userRole: user?.role };
             } catch (error) {
                 throw new GraphQLError('Invalid auth token', { extensions: { code: 'UNAUTHENTICATED' } });
             }

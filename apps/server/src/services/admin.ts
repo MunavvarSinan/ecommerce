@@ -33,7 +33,7 @@ class Admin {
         if (!isPasswordCorrect) {
             throw new GraphQLError('Email/Password combination is incorrect');
         }
-        
+
         return { authToken: createAuthToken(foundAdmin) };
     }
     // public static async createVendor({ name, email, password, phone }: CreateVendorInput) {
@@ -50,6 +50,9 @@ class Admin {
 
     //     return createdVendor;
     // }
+    public static async getAdmins() {
+        return await db.admin.findMany();
+    }
 }
 
 export default Admin;
