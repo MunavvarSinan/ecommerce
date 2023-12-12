@@ -23,7 +23,18 @@ import {
 } from "@repo/ui/components/ui/form";
 import { Input } from "@repo/ui/components/ui/input";
 
+interface Data {
+    data: {
+        adminLogin: {
+            authToken: string,
+            user: {
+                id: string,
+                role: string
+            }
+        }
+    }
 
+}
 type SignInFormProps = React.HTMLAttributes<HTMLDivElement>
 
 export function SignInForm({ className, ...props }: SignInFormProps): JSX.Element {
@@ -50,7 +61,7 @@ export function SignInForm({ className, ...props }: SignInFormProps): JSX.Elemen
 
     const isButtonDisabled = !formState.isValid || formState.isSubmitting || isLoading;
 
-    const onSubmit = async (values: FormValues): Promise<any> => {
+    const onSubmit = async (values: FormValues): Promise<void> => {
         setIsLoading(true)
         try {
             const { data } = await adminLogin({
@@ -58,8 +69,9 @@ export function SignInForm({ className, ...props }: SignInFormProps): JSX.Elemen
                     email: values.email,
                     password: values.password
                 }
-            })
-            if (data?.adminLogin?.authToken) {
+            }) as Data
+
+            if (data.adminLogin.authToken) {
                 clientCookies.set('token', data.adminLogin.authToken)
                 window.location.href = '/'
             }
@@ -101,7 +113,7 @@ export function SignInForm({ className, ...props }: SignInFormProps): JSX.Elemen
                                     <FormField
                                         control={form.control}
                                         name="email"
-                                        render={({ field }: { field: FormValues }) => {
+                                        render={({ field }) => {
                                             return (
                                                 <FormItem>
                                                     <FormLabel>Email address</FormLabel>
@@ -120,7 +132,7 @@ export function SignInForm({ className, ...props }: SignInFormProps): JSX.Elemen
                                     <FormField
                                         control={form.control}
                                         name="password"
-                                        render={({ field }: { field: FormValues }) => {
+                                        render={({ field }) => {
                                             return (
                                                 <FormItem>
                                                     <FormLabel>Password</FormLabel>
