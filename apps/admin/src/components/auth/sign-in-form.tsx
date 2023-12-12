@@ -59,7 +59,6 @@ export function SignInForm({ className, ...props }: SignInFormProps): JSX.Elemen
                     password: values.password
                 }
             })
-            console.log(data)
             if (data?.adminLogin?.authToken) {
                 clientCookies.set('token', data.adminLogin.authToken)
                 window.location.href = '/'
