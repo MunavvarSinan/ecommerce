@@ -3,30 +3,33 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "lint": "eslint \"**/*.ts*\"",
     "ui:add": "pnpm dlx shadcn-ui@latest add"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "^17.0.12",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "autoprefixer": "^10.4.14",
+    "@types/node": "^17.0.45",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "autoprefixer": "^10.4.16",
     "eslint": "^7.32.0",
-    "postcss": "^8.4.24",
+    "postcss": "^8.4.32",
     "react": "^17.0.2",
-    "tailwindcss": "^3.3.2",
-    "typescript": "^4.5.2"
+    "tailwindcss": "^3.3.6",
+    "typescript": "^4.9.5"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
+    "@radix-ui/react-avatar": "^1.0.4",
+    "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-slot": "^1.0.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^1.2.1",
     "lucide-react": "^0.244.0",
-    "react-hook-form": "^7.48.2",
-    "tailwind-merge": "^1.13.2",
-    "tailwindcss-animate": "^1.0.7"
+    "react-hook-form": "^7.49.0",
+    "tailwind-merge": "^1.14.0",
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.22.4"
   }
 }
