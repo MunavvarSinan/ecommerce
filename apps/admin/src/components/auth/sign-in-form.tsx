@@ -1,16 +1,16 @@
 "use client";
 
+
 import * as z from 'zod';
-import { useMutation } from "@apollo/client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import clientCookies from 'js-cookie';
-import { Loader } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import clsx from 'clsx';
 import Link from 'next/link';
-
-import { ADMIN_LOGIN } from "@/lib/graphql/auth/mutations/auth";
+import cl from 'clsx';
+import clientCookies from 'js-cookie';
+import { Loader } from "lucide-react";
+import type { SubmitHandler } from "react-hook-form"
+import { useMutation } from "@apollo/client";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@repo/ui/components/ui/card';
 import {
@@ -22,6 +22,7 @@ import {
     FormMessage
 } from "@repo/ui/components/ui/form";
 import { Input } from "@repo/ui/components/ui/input";
+import { ADMIN_LOGIN } from "@/lib/graphql/auth/mutations/auth";
 
 interface Data {
     data: {
@@ -61,7 +62,7 @@ export function SignInForm({ className, ...props }: SignInFormProps): JSX.Elemen
 
     const isButtonDisabled = !formState.isValid || formState.isSubmitting || isLoading;
 
-    const onSubmit = async (values: FormValues): Promise<void> => {
+    const onSubmit: SubmitHandler<FormValues> = async (values) => {
         setIsLoading(true)
         try {
             const { data } = await adminLogin({
@@ -82,7 +83,7 @@ export function SignInForm({ className, ...props }: SignInFormProps): JSX.Elemen
         }
     }
     return (
-        <main className={clsx(
+        <main className={cl(
             "flex flex-col max-w-xl justify-center container -mt-14 lg:max-w-none lg:grid-cols-2 lg:px-0 sm:max-w-lg self-center min-h-screen items-center",
             className,
         )}
@@ -97,7 +98,7 @@ export function SignInForm({ className, ...props }: SignInFormProps): JSX.Elemen
                         Logo
                     </Link>
                     <CardDescription
-                        className={clsx(
+                        className={cl(
                             'leading-7 [&:not(:first-child)]:mt-6',
                             "mb-2 font-bold flex flex-col text-base space-y-2 text-center",
                         )}
@@ -139,7 +140,7 @@ export function SignInForm({ className, ...props }: SignInFormProps): JSX.Elemen
                                                     <FormControl>
                                                         <Input
                                                             placeholder="Password"
-                                                            type="passord"
+                                                            type="password"
                                                             {...field}
                                                         />
                                                     </FormControl>
@@ -165,8 +166,8 @@ export function SignInForm({ className, ...props }: SignInFormProps): JSX.Elemen
                         By using the buttons above, you agree with{" "}
                         <span>
                             <Link
-                                href="/terms"
                                 className="text-muted-foreground font-semibold hover:underline underline-offset-4 hover:text-primary"
+                                href="/terms"
                             >
                                 Terms of Service
                             </Link>
@@ -174,8 +175,8 @@ export function SignInForm({ className, ...props }: SignInFormProps): JSX.Elemen
                         <span className="mx-1">and</span>
                         <span>
                             <Link
-                                href="/privacy"
                                 className="text-muted-foreground font-semibold hover:underline underline-offset-4 hover:text-primary"
+                                href="/privacy"
                             >
                                 Privacy Policy
                             </Link>

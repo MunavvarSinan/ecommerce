@@ -11,9 +11,6 @@ const config = {
   arrowParens: "always",
   trailingComma: "all",
   endOfLine: "lf",
-
-  importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],
-
 };
 
 module.exports = config;

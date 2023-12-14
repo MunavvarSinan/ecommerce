@@ -1,20 +1,24 @@
 "use client"
 
-import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
 import React from "react";
-
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { cn } from "@repo/ui/lib/utils";
 
 const MainNav = ({
     className,
     ...props
-}: React.HTMLAttributes<HTMLElement>) => {
+}: React.HTMLAttributes<HTMLElement>): JSX.Element => {
 
     const pathname = usePathname();
 
 
     const routes = [
+        {
+            href: `/vendors`,
+            label: 'vendors',
+            active: pathname === `/vendors`
+        },
         {
             href: `/settings`,
             label: 'Settings',
@@ -27,16 +31,19 @@ const MainNav = ({
                 "flex items-center space-x-4 lg:space-x-6",
                 className
             )
-        }>
+
+        }
+            {...props}
+        >
             {
-                routes.map((route, index) => (
-                    <Link href={route.href} key={index} className={
+                routes.map((route) => (
+                    <Link className={
                         cn(
                             "text-sm font-medium transition-colors hover:text-primary",
                             route.active ? "text-gray-900 dark:text-white" : "text-muted-foreground"
 
                         )
-                    }>
+                    } href={route.href} key={route.label} >
                         {route.label}
                     </Link>
                 ))

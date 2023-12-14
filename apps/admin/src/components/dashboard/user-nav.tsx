@@ -1,5 +1,6 @@
 "use client"
 
+import clientCookies from "js-cookie"
 import {
     Avatar,
     AvatarFallback,
@@ -16,25 +17,27 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from "@repo/ui/components/ui/dropdown-menu"
-import clientCookies from "js-cookie"
+import { userStore } from '@/lib/store/store'
 
-export function UserNav() {
+
+export function UserNav(): JSX.Element {
+    const { user } = userStore()
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Button className="relative h-8 w-8 rounded-full" variant="ghost" >
                     <Avatar className="h-10 w-10 ">
-                        <AvatarImage src="/avatars/01.png" alt="@shadcn" className="bg-black" />
+                        <AvatarImage alt="@shadcn" className="bg-black" src="/avatars/01.png" />
                         <AvatarFallback className="bg-gray-500 text-white font-bold">SC</AvatarFallback>
                     </Avatar>
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuContent align="end" className="w-56" forceMount>
                 <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
                         <p className="text-sm font-medium leading-none">shadcn</p>
                         <p className="text-xs leading-none text-muted-foreground">
-                            m@example.com
+                            {user?.id}
                         </p>
                     </div>
                 </DropdownMenuLabel>

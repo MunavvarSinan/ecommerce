@@ -1,8 +1,8 @@
-import { ApolloWrapper } from "@/providers/apollo-provider";
 import "@repo/ui/styles/globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
+import { ApolloWrapper } from "@/providers/apollo-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
