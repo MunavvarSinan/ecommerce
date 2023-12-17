@@ -28,16 +28,37 @@ module.exports = {
     JSX: true,
   },
   plugins: ["only-warn"],
+  // this is for sorting imports
   rules: {
     'react/react-in-jsx-scope': 'off',
     'import/no-default-export': 'off',
     "react/function-component-definition": "off",
     'import/no-extraneous-dependencies': 'off',
+    "@typescript-eslint/no-misused-promises": [2, {
+      "checksVoidReturn": {
+        "attributes": false
+      }
+    }],
+    "no-empty-line-between-import-groups": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+        ],
+        "newlines-between": "always",
+      },
+    ],
   },
   settings: {
     "import/resolver": {
       typescript: {
-        project,
+        project
       },
     },
   },
