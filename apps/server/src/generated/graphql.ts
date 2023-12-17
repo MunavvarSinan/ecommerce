@@ -30,6 +30,7 @@ export type Admin = {
 export type AuthResult = {
   __typename?: 'AuthResult';
   authToken: Scalars['String']['output'];
+  user: UserRole;
 };
 
 export type Category = {
@@ -185,6 +186,7 @@ export type Query = {
 
 export type QueryGetAdminArgs = {
   id: Scalars['ID']['input'];
+  role: Scalars['String']['input'];
 };
 
 
@@ -220,6 +222,12 @@ export type Vendor = {
   products?: Maybe<Array<Product>>;
   role: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
+};
+
+export type UserRole = {
+  __typename?: 'userRole';
+  id: Scalars['ID']['output'];
+  role: Scalars['String']['output'];
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -313,6 +321,7 @@ export type ResolversTypes = ResolversObject<{
   Size: ResolverTypeWrapper<Size>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Vendor: ResolverTypeWrapper<Vendor>;
+  userRole: ResolverTypeWrapper<UserRole>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -336,6 +345,7 @@ export type ResolversParentTypes = ResolversObject<{
   Size: Size;
   String: Scalars['String']['output'];
   Vendor: Vendor;
+  userRole: UserRole;
 }>;
 
 export type AdminResolvers<ContextType = any, ParentType extends ResolversParentTypes['Admin'] = ResolversParentTypes['Admin']> = ResolversObject<{
@@ -350,6 +360,7 @@ export type AdminResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type AuthResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthResult'] = ResolversParentTypes['AuthResult']> = ResolversObject<{
   authToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['userRole'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -442,7 +453,7 @@ export type ProductResolvers<ContextType = any, ParentType extends ResolversPare
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  getAdmin?: Resolver<ResolversTypes['Admin'], ParentType, ContextType, RequireFields<QueryGetAdminArgs, 'id'>>;
+  getAdmin?: Resolver<ResolversTypes['Admin'], ParentType, ContextType, RequireFields<QueryGetAdminArgs, 'id' | 'role'>>;
   getAdmins?: Resolver<Array<ResolversTypes['Admin']>, ParentType, ContextType>;
   getVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<QueryGetVendorArgs, 'id'>>;
   getVendors?: Resolver<Array<ResolversTypes['Vendor']>, ParentType, ContextType>;
@@ -475,6 +486,12 @@ export type VendorResolvers<ContextType = any, ParentType extends ResolversParen
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type UserRoleResolvers<ContextType = any, ParentType extends ResolversParentTypes['userRole'] = ResolversParentTypes['userRole']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = any> = ResolversObject<{
   Admin?: AdminResolvers<ContextType>;
   AuthResult?: AuthResultResolvers<ContextType>;
@@ -489,5 +506,6 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   Size?: SizeResolvers<ContextType>;
   Vendor?: VendorResolvers<ContextType>;
+  userRole?: UserRoleResolvers<ContextType>;
 }>;
 

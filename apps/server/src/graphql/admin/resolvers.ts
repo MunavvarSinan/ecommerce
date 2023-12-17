@@ -32,7 +32,15 @@ const adminResolvers: Resolvers = {
         getAdmins: async (_: any, __: any, context: GqlContext) => {
             await requireAuthorization({ context }, ['ADMIN']);
             return await Admin.getAdmins();
-
+        },
+        getAdmin: async (_: any, { id, role }: any, context: GqlContext) => {
+            await requireAuthorization({ context }, ['ADMIN', 'VENDOR', 'BUYER']);
+            const admin = await Admin.getUserById(id, role);
+            if (admin) {
+                return admin;
+            } else {
+                throw new Error('Admin not found');
+            }
         }
     }
 }

@@ -33,8 +33,11 @@ class Admin {
         if (!isPasswordCorrect) {
             throw new GraphQLError('Email/Password combination is incorrect');
         }
-
-        return { authToken: createAuthToken(foundAdmin) };
+        const user = {
+            id: foundAdmin.id,
+            role: foundAdmin.role,
+        }
+        return { authToken: createAuthToken(foundAdmin), user };
     }
     // public static async createVendor({ name, email, password, phone }: CreateVendorInput) {
     //     const foundVendor = await Admin.getAdminByEmail(email);
@@ -52,6 +55,10 @@ class Admin {
     // }
     public static async getAdmins() {
         return await db.admin.findMany();
+    }
+    public static async getUserById(id: string, role: string) {
+        return await db.admin.findUnique({ where: { id } });
+
     }
 }
 

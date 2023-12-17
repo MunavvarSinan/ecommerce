@@ -1,16 +1,15 @@
-import Navbar from "@/components/dashboard/navbar";
+import HydrationZustand from "@/providers/hydration";
+import Navbar from "@/components/dashboard/navigation/navbar";
 
 export default function DashboardLayout({
-    children,
+  children,
 }: {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }): JSX.Element {
-    return (
-        <>
-            <Navbar />
-            <div className="p-5">
-                {children}
-            </div>
-        </>
-    );
+  return (
+    <HydrationZustand>
+      <Navbar />
+      <div className="p-5">{children}</div>
+    </HydrationZustand>
+  );
 }
