@@ -9,3 +9,23 @@ export const GET_ADMIN = gql`
     }
   }
 `;
+
+export const GET_ALL_VENDORS = gql`
+  query{
+  getVendors {
+    email
+    id
+    name
+    address
+    phone
+    role
+    stores {
+      id
+      name
+      slug
+      description
+
+    }
+  }
+}
+`

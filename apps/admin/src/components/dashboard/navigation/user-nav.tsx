@@ -1,9 +1,6 @@
 "use client";
 
-import { useSuspenseQuery, type ApolloError } from "@apollo/client";
-import chroma from "chroma-js";
-import clientCookies from "js-cookie";
-
+import { useSuspenseQuery } from "@apollo/client";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 import { Button } from "@repo/ui/components/ui/button";
 import {
@@ -16,20 +13,13 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@repo/ui/components/ui/dropdown-menu";
+import chroma from "chroma-js";
+import clientCookies from "js-cookie";
 
 import { GET_ADMIN } from "@/lib/graphql/admin/query/admin";
 import { userStore } from "@/lib/store/store";
+import type { USER_DATA } from "@/types";
 
-interface Data {
-  data: {
-    getAdmin: {
-      id: string;
-      name: string;
-      email: string;
-    };
-  };
-  error: ApolloError;
-}
 const COLOR_PALETTE = [
   "#2DBF52", // Green
   "#F2709C", // Pink
@@ -44,7 +34,8 @@ export function UserNav(): JSX.Element {
       id: user?.id,
       role: user?.role,
     },
-  }) as Data;
+  }) as USER_DATA;
+
   const initials = data.getAdmin.name.slice(0, 2).toUpperCase();
   const paletteIndex = initials.charCodeAt(0) % COLOR_PALETTE.length;
   const backgroundColor = COLOR_PALETTE[paletteIndex];

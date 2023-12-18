@@ -47,7 +47,7 @@ const adminResolvers: Resolvers = {
             }
         },
         getVendors: async (_: any, __: any, context: GqlContext) => {
-            // await requireAuthorization({ context }, ['ADMIN']);
+            await requireAuthorization({ context }, ['ADMIN']);
             const vendors = await Admin.getVendors();
             if (vendors) {
                 return vendors;

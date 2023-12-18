@@ -34,11 +34,7 @@ module.exports = {
     'import/no-default-export': 'off',
     "react/function-component-definition": "off",
     'import/no-extraneous-dependencies': 'off',
-    "@typescript-eslint/no-misused-promises": [2, {
-      "checksVoidReturn": {
-        "attributes": false
-      }
-    }],
+  
     "no-empty-line-between-import-groups": "off",
     "import/order": [
       "error",
