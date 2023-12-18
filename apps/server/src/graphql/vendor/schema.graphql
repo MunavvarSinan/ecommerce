@@ -1,5 +1,5 @@
-#import Product from '../product/product.graphql'
 #import Order from '../product/product.graphql'
+#import Product from '../product/product.graphql'
 scalar DateTime
 
 type Vendor {
@@ -9,26 +9,35 @@ type Vendor {
   phone: String!
   passwordHash: String!
   role: String!
-  products: [Product!]
   address: String!
   orders: [Order!]
+  stores: [Store!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
 
+type Store {
+  id: String!
+  name: String!
+  description: String
+  slug: String
+  stripeAccountId: String
+  vendor: Vendor!
+  products: [Product!]
+  orders: [Order!]
+}
 type Query {
-  vendors: [Vendor!]!
   vendor(id: String!): Vendor!
+  getAllStores: [Store!]
 }
 
 type Mutation {
   vendorLogin(email: String!, password: String!): AuthResult!
   updateVendor(id: String!, email: String!, phone: String!, password: String!): Vendor!
   deleteVendor(id: String!): Vendor!
+  createStore(name: String!, description: String, vendorId: String!): Store!
 }
 
 type AuthResult {
   authToken: String!
 }
-
-

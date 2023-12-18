@@ -23,20 +23,37 @@ model User {
 }
 
 model Vendor {
-  id           String    @id
-  name         String
-  email        String    @unique
-  phone        String    @unique
-  passwordHash String
-  role         Role      @default(VENDOR)
-  products     Product[] @relation("VendorToProduct")
-  address      String
-  orders       Order[]   @relation("VendorToOrder")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String   @id
+  name            String
+  email           String   @unique
+  phone           String   @unique
+  passwordHash    String
+  role            Role     @default(VENDOR)
+  address         String
+  stripeAccountId String?
+  orders          Order[]  @relation("VendorToOrder")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  stores          Store[]  @relation("VendorToStore")
 
   @@map("vendors")
+}
+
+model Store {
+  id          String   @id
+  name        String
+  vendorId    String   
+  description String?
+  slug        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  vendor   Vendor    @relation("VendorToStore", fields: [vendorId], references: [id])
+  products Product[]
+  orders   Order[]   @relation("OrderToStore")
+  
+  @@map("stores")
+  @@index([vendorId])
 }
 
 model Admin {
@@ -66,7 +83,7 @@ model Category {
   parent        Category?  @relation("Subcategories", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   subcategories Category[] @relation("Subcategories")
 
-  Product Product[]
+  products Product[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -85,10 +102,8 @@ model Product {
   stockQuantity Int     @default(0)
   inStock       Boolean @default(true)
 
-  categoryId String   @unique
+  categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
-  vendorId   String   @unique
-  vendor     Vendor   @relation("VendorToProduct", fields: [vendorId], references: [id])
   color      Color?   @relation(fields: [colorId], references: [id])
   colorId    String?
   size       Size?    @relation(fields: [sizeId], references: [id])
@@ -98,31 +113,35 @@ model Product {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   OrderItem OrderItem[]
+  Store     Store?      @relation(fields: [storeId], references: [id])
+  storeId   String?
 
   @@index([colorId])
   @@index([sizeId])
+  @@index([storeId])
+  @@index([categoryId])
   @@map("products")
 }
 
 model Order {
   id         String      @id
-  ventorId   String
-  vendor     Vendor      @relation("VendorToOrder", fields: [ventorId], references: [id])
-  orderItems OrderItem[] // Relation to OrderItem model
-  isPaid     Boolean     @default(false)
-  phone      String      @default("")
-  address    String      @default("")
+  vendorId   String
+  vendor     Vendor      @relation("VendorToOrder", fields: [vendorId], references: [id])
+  orderItems OrderItem[]
+  storeId    String
+  store      Store       @relation("OrderToStore", fields: [storeId], references: [id])
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 
-  @@index([ventorId])
+  @@index([vendorId])
+  @@index([storeId])
 }
 
 model OrderItem {
-  id        String  @id @default(uuid())
-  orderId   String // Foreign Key to Order
+  id        String  @id
+  orderId   String
   order     Order   @relation(fields: [orderId], references: [id])
-  productId String // Foreign Key to Product
+  productId String
   product   Product @relation(fields: [productId], references: [id])
 
   @@index([orderId])
@@ -133,7 +152,7 @@ model Size {
   id        String    @id
   name      String
   value     String
-  products  Product[] // Relation to Product model
+  products  Product[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
@@ -142,18 +161,16 @@ model Color {
   id        String    @id
   name      String
   value     String
-  products  Product[] // Relation to Product model
+  products  Product[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
 
 model Image {
-  id        String   @id
-  productId String // Foreign Key to Product
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  url       String // URL of the image
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String  @id
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
 
   @@index([productId])
 }

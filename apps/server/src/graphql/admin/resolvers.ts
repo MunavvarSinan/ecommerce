@@ -1,9 +1,10 @@
 
 import { Resolvers } from "@/generated/graphql";
 import Admin from "@/services/admin";
+import { requireAuthorization } from "@/utils/auth";
 import { DateTimeScalar } from '@/utils/constants';
 import { GqlContext } from "../types";
-import { requireAuthorization } from "@/utils/auth";
+import { GraphQLError } from "graphql";
 
 
 const adminResolvers: Resolvers = {
@@ -18,15 +19,18 @@ const adminResolvers: Resolvers = {
             if (admin) {
                 return admin; // Return the complete Admin object
             } else {
-                throw new Error('Invalid login credentials');
+                throw new GraphQLError('Invalid login credentials');
             }
         },
-
-        // createVendor: async (_, { name, email, phone, password }, context: GqlContext) => {
-        //     await requireAuthorization({ context }, ['ADMIN']);
-        //     const vendor = await Admin.createVendor({ name, email, phone, password });
-        //     return vendor;
-        // }
+        createVendor: async (_, { name, email, phone, password, address }, context: GqlContext) => {
+            // await requireAuthorization({ context }, ['ADMIN']);
+            const vendor = await Admin.createVendor({ name, email, phone, password, address });
+            if (vendor) {
+                return vendor;
+            } else {
+                throw new GraphQLError('Error creating vendor');
+            }
+        }
     },
     Query: {
         getAdmins: async (_: any, __: any, context: GqlContext) => {
@@ -39,9 +43,18 @@ const adminResolvers: Resolvers = {
             if (admin) {
                 return admin;
             } else {
-                throw new Error('Admin not found');
+                throw new GraphQLError('Admin not found');
             }
-        }
+        },
+        getVendors: async (_: any, __: any, context: GqlContext) => {
+            // await requireAuthorization({ context }, ['ADMIN']);
+            const vendors = await Admin.getVendors();
+            if (vendors) {
+                return vendors;
+            } else {
+                throw new GraphQLError('No vendors found');
+            }
+        },
     }
 }
 

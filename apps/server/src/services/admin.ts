@@ -1,13 +1,13 @@
-import { GraphQLError } from "graphql";
 import bcrypt from 'bcrypt';
+import { GraphQLError } from "graphql";
 
 import db, { genId } from "@/modules/db";
+import { createAuthToken } from "@/utils/auth";
 import { SALT_ROUNDS } from "@/utils/constants";
 import { CreateAdminInput, CreateVendorInput } from "interfaces/admin";
-import { createAuthToken } from "@/utils/auth";
 
 class Admin {
-    public static async getAdminByEmail(email: string) {
+    private static async getAdminByEmail(email: string) {
         return await db.admin.findUnique({ where: { email } });
     }
     public static async createAdmin({ name, email, password, phone }: CreateAdminInput) {
@@ -39,26 +39,31 @@ class Admin {
         }
         return { authToken: createAuthToken(foundAdmin), user };
     }
-    // public static async createVendor({ name, email, password, phone }: CreateVendorInput) {
-    //     const foundVendor = await Admin.getAdminByEmail(email);
-    //     if (foundVendor) {
-    //         throw new GraphQLError(`Vendor with email ${email} already exists`);
-    //     }
-    //     const id = genId();
-    //     const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    public static async createVendor({ name, email, password, phone, address }: CreateVendorInput) {
+        const foundVendor = await Admin.getAdminByEmail(email);
+        if (foundVendor) {
+            throw new GraphQLError(`Vendor with email ${email} already exists`);
+        }
+        const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
-    //     const createdVendor = await db.vendor.create({
-    //         data: { id, name, email, phone, passwordHash },
-    //     });
-
-    //     return createdVendor;
-    // }
+        return await db.vendor.create({
+            data: { id: genId(), name, email, phone, passwordHash, address },
+        });
+    }
     public static async getAdmins() {
         return await db.admin.findMany();
     }
     public static async getUserById(id: string, role: string) {
         return await db.admin.findUnique({ where: { id } });
-
+    }
+    public static async getVendors() {
+        return await db.vendor.findMany({
+            include: {
+                stores: {
+                    include: { vendor: true }
+                }
+            }
+        });
     }
 }
 

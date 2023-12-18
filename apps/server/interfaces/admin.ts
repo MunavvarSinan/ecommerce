@@ -11,5 +11,6 @@ export interface CreateVendorInput {
     email: string;
     password: string;
     phone: string;
+    address: string;
     // Add other fields as needed
 }

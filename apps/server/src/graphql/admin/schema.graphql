@@ -19,7 +19,7 @@ input ProductInput {
 }
 type Mutation {
   adminLogin(email: String!, password: String!): AuthResult!
-  createVendor(name: String!, email: String!, phone: String!, password: String!): Vendor!
+  createVendor(name: String!, email: String!, phone: String!, password: String!, address: String!): Vendor!
   createAdmin(name: String!, phone: String!, email: String!, password: String!): Admin!
   createCategory(name: String!, products: [ProductInput!]): Category!
 }

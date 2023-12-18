@@ -70,6 +70,7 @@ export type Mutation = {
   adminLogin: AuthResult;
   createAdmin: Admin;
   createCategory: Category;
+  createStore: Store;
   createVendor: Vendor;
   deleteVendor: Vendor;
   updateVendor: Vendor;
@@ -97,7 +98,15 @@ export type MutationCreateCategoryArgs = {
 };
 
 
+export type MutationCreateStoreArgs = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  vendorId: Scalars['String']['input'];
+};
+
+
 export type MutationCreateVendorArgs = {
+  address: Scalars['String']['input'];
   email: Scalars['String']['input'];
   name: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -177,10 +186,10 @@ export type Query = {
   __typename?: 'Query';
   getAdmin: Admin;
   getAdmins: Array<Admin>;
+  getAllStores?: Maybe<Array<Store>>;
   getVendor: Vendor;
   getVendors: Array<Vendor>;
   vendor: Vendor;
-  vendors: Array<Vendor>;
 };
 
 
@@ -209,6 +218,18 @@ export type Size = {
   value: Scalars['String']['output'];
 };
 
+export type Store = {
+  __typename?: 'Store';
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  orders?: Maybe<Array<Order>>;
+  products?: Maybe<Array<Product>>;
+  slug?: Maybe<Scalars['String']['output']>;
+  stripeAccountId?: Maybe<Scalars['String']['output']>;
+  vendor: Vendor;
+};
+
 export type Vendor = {
   __typename?: 'Vendor';
   address: Scalars['String']['output'];
@@ -219,8 +240,8 @@ export type Vendor = {
   orders?: Maybe<Array<Order>>;
   passwordHash: Scalars['String']['output'];
   phone: Scalars['String']['output'];
-  products?: Maybe<Array<Product>>;
   role: Scalars['String']['output'];
+  stores?: Maybe<Array<Store>>;
   updatedAt: Scalars['DateTime']['output'];
 };
 
@@ -319,6 +340,7 @@ export type ResolversTypes = ResolversObject<{
   ProductInput: ProductInput;
   Query: ResolverTypeWrapper<{}>;
   Size: ResolverTypeWrapper<Size>;
+  Store: ResolverTypeWrapper<Store>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Vendor: ResolverTypeWrapper<Vendor>;
   userRole: ResolverTypeWrapper<UserRole>;
@@ -343,6 +365,7 @@ export type ResolversParentTypes = ResolversObject<{
   ProductInput: ProductInput;
   Query: {};
   Size: Size;
+  Store: Store;
   String: Scalars['String']['output'];
   Vendor: Vendor;
   userRole: UserRole;
@@ -404,7 +427,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   adminLogin?: Resolver<ResolversTypes['AuthResult'], ParentType, ContextType, RequireFields<MutationAdminLoginArgs, 'email' | 'password'>>;
   createAdmin?: Resolver<ResolversTypes['Admin'], ParentType, ContextType, RequireFields<MutationCreateAdminArgs, 'email' | 'name' | 'password' | 'phone'>>;
   createCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'name'>>;
-  createVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<MutationCreateVendorArgs, 'email' | 'name' | 'password' | 'phone'>>;
+  createStore?: Resolver<ResolversTypes['Store'], ParentType, ContextType, RequireFields<MutationCreateStoreArgs, 'name' | 'vendorId'>>;
+  createVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<MutationCreateVendorArgs, 'address' | 'email' | 'name' | 'password' | 'phone'>>;
   deleteVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<MutationDeleteVendorArgs, 'id'>>;
   updateVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<MutationUpdateVendorArgs, 'email' | 'id' | 'password' | 'phone'>>;
   vendorLogin?: Resolver<ResolversTypes['AuthResult'], ParentType, ContextType, RequireFields<MutationVendorLoginArgs, 'email' | 'password'>>;
@@ -455,10 +479,10 @@ export type ProductResolvers<ContextType = any, ParentType extends ResolversPare
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   getAdmin?: Resolver<ResolversTypes['Admin'], ParentType, ContextType, RequireFields<QueryGetAdminArgs, 'id' | 'role'>>;
   getAdmins?: Resolver<Array<ResolversTypes['Admin']>, ParentType, ContextType>;
+  getAllStores?: Resolver<Maybe<Array<ResolversTypes['Store']>>, ParentType, ContextType>;
   getVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<QueryGetVendorArgs, 'id'>>;
   getVendors?: Resolver<Array<ResolversTypes['Vendor']>, ParentType, ContextType>;
   vendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<QueryVendorArgs, 'id'>>;
-  vendors?: Resolver<Array<ResolversTypes['Vendor']>, ParentType, ContextType>;
 }>;
 
 export type SizeResolvers<ContextType = any, ParentType extends ResolversParentTypes['Size'] = ResolversParentTypes['Size']> = ResolversObject<{
@@ -471,6 +495,18 @@ export type SizeResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type StoreResolvers<ContextType = any, ParentType extends ResolversParentTypes['Store'] = ResolversParentTypes['Store']> = ResolversObject<{
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  orders?: Resolver<Maybe<Array<ResolversTypes['Order']>>, ParentType, ContextType>;
+  products?: Resolver<Maybe<Array<ResolversTypes['Product']>>, ParentType, ContextType>;
+  slug?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  stripeAccountId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  vendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type VendorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Vendor'] = ResolversParentTypes['Vendor']> = ResolversObject<{
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -480,8 +516,8 @@ export type VendorResolvers<ContextType = any, ParentType extends ResolversParen
   orders?: Resolver<Maybe<Array<ResolversTypes['Order']>>, ParentType, ContextType>;
   passwordHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   phone?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  products?: Resolver<Maybe<Array<ResolversTypes['Product']>>, ParentType, ContextType>;
   role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  stores?: Resolver<Maybe<Array<ResolversTypes['Store']>>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -505,6 +541,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Product?: ProductResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Size?: SizeResolvers<ContextType>;
+  Store?: StoreResolvers<ContextType>;
   Vendor?: VendorResolvers<ContextType>;
   userRole?: UserRoleResolvers<ContextType>;
 }>;
