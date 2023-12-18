@@ -6,6 +6,7 @@ import { ApolloWrapper } from "@/providers/apollo-provider";
 import { NextThemesProvider } from "@/providers/theme-provider";
 
 import "@repo/ui/styles/globals.css";
+import { ReactHotToast } from "@/providers/hot-toast-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <NextThemesProvider>
           <ApolloWrapper delay={delay} token={token}>
+            <ReactHotToast />
             {children}
           </ApolloWrapper>
         </NextThemesProvider>

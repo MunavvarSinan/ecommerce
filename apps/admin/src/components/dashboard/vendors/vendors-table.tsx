@@ -9,7 +9,7 @@ import type { ProductsTableShellProps, VENDOR_DATA } from "@/types";
 
 import { DataTable } from "../data-table/data-table";
 import { DataTableColumnHeader } from "../data-table/data-table-column-header";
-import { CheckboxComponent, CheckboxHeader } from '../data-table/data-table-components';
+import DataTableActions, { CheckboxComponent, CheckboxHeader } from '../data-table/data-table-components';
 
 
 
@@ -70,6 +70,12 @@ export function VendorsTableShell({
                         return <Badge className='capitalize' variant="secondary">{role}</Badge>
                     }
                 }
+            },
+            {
+                id: "actions",
+                cell: ({ row }) => (
+                    <DataTableActions row={row} />
+                )
             }
         ],
         [data],

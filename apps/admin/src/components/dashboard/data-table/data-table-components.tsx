@@ -1,5 +1,12 @@
+import { toast } from "react-hot-toast";
+import { useTransition } from "react";
+import Link from "next/link";
 import { Checkbox } from "@repo/ui/components/ui/checkbox";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { Button } from "@repo/ui/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuTrigger } from "@repo/ui/components/ui/dropdown-menu";
 
+import { catchError } from "@/utils";
 import type { CheckboxHeaderProps } from "@/types";
 
 interface Row {
@@ -46,4 +53,69 @@ export const CheckboxHeader = ({ table, setSelectedRowIds, data }: CheckboxHeade
         />
     )
 
+}
+
+interface DataTableActionsMenuProps {
+    row: Row; // Replace with specific type based on data structure
+};
+
+export default function DataTableActions({
+    row,
+}: DataTableActionsMenuProps): JSX.Element {
+    const { original: item } = row;
+    const [isPending, startTransition] = useTransition();
+    const deleteAction = (id: string) => {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(`success ${id}`);
+            }, 1000);
+        });
+    }
+    const handleDeleteClick = (): void => {
+        startTransition(async () => {
+            row.toggleSelected(false); // Update selected state
+
+            await toast.promise(
+                deleteAction(item.id),
+                {
+                    loading: "Deleting product...",
+                    success: () => "Product deleted successfully.",
+                    error: (err: unknown) => catchError(err),
+                },
+            );
+        });
+    };
+
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button
+                    aria-label="Open menu"
+                    className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+                    variant="ghost"
+                >
+                    <DotsHorizontalIcon aria-hidden="true" className="h-4 w-4" />
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[160px]">
+                <DropdownMenuItem asChild>
+                    <Link href="/vendors">
+                        Edit
+                    </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                    <Link href={`/product/${item.id}`}>View</Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                    disabled={isPending}
+                    onClick={handleDeleteClick}
+                >
+                    Delete
+                    <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu >
+
+    )
 }
