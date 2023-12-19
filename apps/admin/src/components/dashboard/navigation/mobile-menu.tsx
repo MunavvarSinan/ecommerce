@@ -1,12 +1,8 @@
 "use client";
 
 import * as React from "react";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-import type { MENU_ITEM_PROPS } from "@/types";
-
 import { Button } from "@repo/ui/components/ui/button";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import {
@@ -14,11 +10,10 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@repo/ui/components/ui/sheet";
-
 import { cn } from "@repo/ui/lib/utils";
 
+import type { MENU_ITEM_PROPS } from "@/types";
 import { Icons } from "@/components/icons";
-
 import { siteConfig } from "@/config/site-config";
 
 interface MobileMenuProps {
@@ -38,7 +33,9 @@ export function MobileMenu({ MainMenuItems }: MobileMenuProps): JSX.Element {
         >
           <Icons.menu className="h-6 w-6" />
           <span className="sr-only">Toggle Menu</span>
-          <span className="ml-2 font-heading tracking-wide">Relivator</span>
+          <span className="ml-2 font-heading tracking-wide">
+            Ecommerce Admin
+          </span>
         </Button>
       </SheetTrigger>
       <SheetContent className="pl-1 pr-0" side="left">

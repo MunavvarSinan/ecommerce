@@ -1,5 +1,3 @@
-import 'core-js/es/array/from';
-
 import { Skeleton } from "@repo/ui/components/ui/skeleton";
 import {
   Table,
@@ -43,7 +41,7 @@ export function DataTableLoading({
         <Table className="min-w-[640px]">
           <TableHeader>
             {Array.from({ length: 1 }).map((_, i) => (
-              <TableRow className="hover:bg-transparent" key={i} >
+              <TableRow className="hover:bg-transparent" key={i}>
                 {Array.from({ length: columnCount }).map((_, i) => (
                   <TableHead key={i}>
                     <Skeleton className="h-6 w-full" />
@@ -54,7 +52,7 @@ export function DataTableLoading({
           </TableHeader>
           <TableBody>
             {Array.from({ length: rowCount }).map((_, i) => (
-              <TableRow className="hover:bg-transparent" key={i} >
+              <TableRow className="hover:bg-transparent" key={i}>
                 {Array.from({ length: columnCount }).map((_, i) => (
                   <TableCell key={i}>
                     <Skeleton className="h-6 w-full" />

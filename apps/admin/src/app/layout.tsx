@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
+import { cn } from "@repo/ui/lib/utils";
 
 import { ApolloWrapper } from "@/providers/apollo-provider";
 import { NextThemesProvider } from "@/providers/theme-provider";
+import { ReactHotToast } from "@/providers/hot-toast-provider";
 
 import "@repo/ui/styles/globals.css";
-import { ReactHotToast } from "@/providers/hot-toast-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,7 +26,12 @@ export default function RootLayout({
   const token = cookieStore.get("token")?.value ?? "";
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body
+        className={cn(
+          inter.className,
+          "min-h-screen bg-background font-sans antialiased",
+        )}
+      >
         <NextThemesProvider>
           <ApolloWrapper delay={delay} token={token}>
             <ReactHotToast />

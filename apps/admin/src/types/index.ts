@@ -1,5 +1,6 @@
-import { Icons } from "@/components/icons";
 import { ApolloError } from "@apollo/client";
+
+import { Icons } from "@/components/icons";
 
 export type NavItem = {
   title: string;
@@ -13,7 +14,6 @@ export type NavItem = {
 
 export type MENU_ITEM_PROPS = NavItem;
 
-
 export type DataTableSearchableColumn<TData> = {
   id: keyof TData;
   title: string;
@@ -23,7 +23,6 @@ export type Option = {
   value: string;
   icon?: React.ComponentType<{ className?: string }>;
 };
-
 
 export type DataTableFilterableColumn<TData> =
   DataTableSearchableColumn<TData> & {
@@ -53,8 +52,8 @@ export interface VENDOR_DATA {
 export type VENDORS_TYPE = {
   data: {
     getVendors: VENDOR_DATA[]; // Now an array of VENDOR_DATA objects
-  }
-}
+  };
+};
 
 export type USER_DATA = {
   data: {
@@ -65,8 +64,7 @@ export type USER_DATA = {
     };
   };
   error: ApolloError;
-}
-
+};
 
 export interface CheckboxHeaderProps {
   // Type for the table object with relevant methods
@@ -78,4 +76,4 @@ export interface CheckboxHeaderProps {
   setSelectedRowIds: (ids: string[]) => void;
   // Type for the data array (optional)
   data: VENDOR_DATA[];
-};
+}
