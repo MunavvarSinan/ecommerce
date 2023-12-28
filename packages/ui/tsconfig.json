@@ -1,14 +1,26 @@
 {
   "extends": "@repo/typescript-config/react-library.json",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "esModuleInterop": true,
-  },
   "include": [
     "."
   ],
+  "private": true,
+  "publishConfig": {
+    "access": "public"
+  },
   "exclude": [
-    "node_modules",
-    "dist"
-  ]
+    "dist",
+    "build",
+    "node_modules"
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@ui/*": [
+        "./*"
+      ],
+      "@repo/ui/components/ui*": [
+        "./components/ui*"
+      ]
+    }
+  }
 }
