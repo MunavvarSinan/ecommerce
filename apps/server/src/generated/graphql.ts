@@ -27,6 +27,12 @@ export type Admin = {
   role: Scalars['String']['output'];
 };
 
+export type AuthPayload = {
+  __typename?: 'AuthPayload';
+  authToken?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<User>;
+};
+
 export type AuthResult = {
   __typename?: 'AuthResult';
   authToken: Scalars['String']['output'];
@@ -67,20 +73,14 @@ export type Image = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  adminLogin: AuthResult;
   createAdmin: Admin;
   createCategory: Category;
   createStore: Store;
   createVendor: Vendor;
   deleteVendor: Vendor;
+  login?: Maybe<AuthPayload>;
   updateVendor: Vendor;
   vendorLogin: AuthResult;
-};
-
-
-export type MutationAdminLoginArgs = {
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
 };
 
 
@@ -116,6 +116,12 @@ export type MutationCreateVendorArgs = {
 
 export type MutationDeleteVendorArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type MutationLoginArgs = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 
@@ -230,6 +236,12 @@ export type Store = {
   vendor: Vendor;
 };
 
+export type User = {
+  __typename?: 'User';
+  id: Scalars['ID']['output'];
+  role: Scalars['String']['output'];
+};
+
 export type Vendor = {
   __typename?: 'Vendor';
   address: Scalars['String']['output'];
@@ -324,6 +336,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Admin: ResolverTypeWrapper<Admin>;
+  AuthPayload: ResolverTypeWrapper<AuthPayload>;
   AuthResult: ResolverTypeWrapper<AuthResult>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Category: ResolverTypeWrapper<Category>;
@@ -342,6 +355,7 @@ export type ResolversTypes = ResolversObject<{
   Size: ResolverTypeWrapper<Size>;
   Store: ResolverTypeWrapper<Store>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  User: ResolverTypeWrapper<User>;
   Vendor: ResolverTypeWrapper<Vendor>;
   userRole: ResolverTypeWrapper<UserRole>;
 }>;
@@ -349,6 +363,7 @@ export type ResolversTypes = ResolversObject<{
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
   Admin: Admin;
+  AuthPayload: AuthPayload;
   AuthResult: AuthResult;
   Boolean: Scalars['Boolean']['output'];
   Category: Category;
@@ -367,6 +382,7 @@ export type ResolversParentTypes = ResolversObject<{
   Size: Size;
   Store: Store;
   String: Scalars['String']['output'];
+  User: User;
   Vendor: Vendor;
   userRole: UserRole;
 }>;
@@ -378,6 +394,12 @@ export type AdminResolvers<ContextType = any, ParentType extends ResolversParent
   passwordHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   phone?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type AuthPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = ResolversObject<{
+  authToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -424,12 +446,12 @@ export type ImageResolvers<ContextType = any, ParentType extends ResolversParent
 }>;
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  adminLogin?: Resolver<ResolversTypes['AuthResult'], ParentType, ContextType, RequireFields<MutationAdminLoginArgs, 'email' | 'password'>>;
   createAdmin?: Resolver<ResolversTypes['Admin'], ParentType, ContextType, RequireFields<MutationCreateAdminArgs, 'email' | 'name' | 'password' | 'phone'>>;
   createCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'name'>>;
   createStore?: Resolver<ResolversTypes['Store'], ParentType, ContextType, RequireFields<MutationCreateStoreArgs, 'name' | 'vendorId'>>;
   createVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<MutationCreateVendorArgs, 'address' | 'email' | 'name' | 'password' | 'phone'>>;
   deleteVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<MutationDeleteVendorArgs, 'id'>>;
+  login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   updateVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<MutationUpdateVendorArgs, 'email' | 'id' | 'password' | 'phone'>>;
   vendorLogin?: Resolver<ResolversTypes['AuthResult'], ParentType, ContextType, RequireFields<MutationVendorLoginArgs, 'email' | 'password'>>;
 }>;
@@ -507,6 +529,12 @@ export type StoreResolvers<ContextType = any, ParentType extends ResolversParent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type VendorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Vendor'] = ResolversParentTypes['Vendor']> = ResolversObject<{
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -530,6 +558,7 @@ export type UserRoleResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type Resolvers<ContextType = any> = ResolversObject<{
   Admin?: AdminResolvers<ContextType>;
+  AuthPayload?: AuthPayloadResolvers<ContextType>;
   AuthResult?: AuthResultResolvers<ContextType>;
   Category?: CategoryResolvers<ContextType>;
   Color?: ColorResolvers<ContextType>;
@@ -542,6 +571,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   Size?: SizeResolvers<ContextType>;
   Store?: StoreResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
   Vendor?: VendorResolvers<ContextType>;
   userRole?: UserRoleResolvers<ContextType>;
 }>;

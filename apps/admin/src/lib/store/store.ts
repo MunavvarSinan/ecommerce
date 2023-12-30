@@ -11,8 +11,8 @@ interface User {
 
 interface StoreInterface {
   isLoggedIn: boolean;
-  user: User | null;
-  login: (userId: string, role: string) => void;
+  user: User | null | undefined; // Allow null and undefined
+  loginState: (userId: string, role: string) => void;
   logout: () => void;
   updateUserProfile: (profile: Partial<User>) => void;
 }
@@ -26,7 +26,7 @@ export const userStore = create<StoreInterface>()(
   persist(
     (set) => ({
       ...getDefaultAuthState(),
-      login: (userId, role) => {
+      loginState: (userId, role) => {
         set({
           isLoggedIn: true,
           user: { id: userId, role },

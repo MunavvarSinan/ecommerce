@@ -28,12 +28,12 @@ import {
 } from "@repo/ui/components/ui/form";
 import { Input } from "@repo/ui/components/ui/input";
 
-import { ADMIN_LOGIN } from "@/lib/graphql/auth/mutations/auth";
+import { ADMIN_LOGIN, LOGIN } from "@/lib/graphql/auth/mutations/auth";
 import { userStore } from "@/lib/store/store";
 
 interface Data {
   data: {
-    adminLogin: {
+    login: {
       authToken: string;
       user: {
         id: string;
@@ -49,8 +49,8 @@ export function SignInForm({
   ...props
 }: SignInFormProps): JSX.Element {
   const [isLoading, setIsLoading] = useState(false);
-  const [adminLogin] = useMutation(ADMIN_LOGIN);
-  const { login } = userStore();
+  const [login] = useMutation(LOGIN);
+  const { loginState } = userStore();
   const formSchema = z.object({
     email: z.string().email(),
     password: z.string().min(6, { message: "Invalid Password" }),
@@ -75,17 +75,19 @@ export function SignInForm({
   const onSubmit: SubmitHandler<FormValues> = async (values) => {
     setIsLoading(true);
     try {
-      const { data } = (await adminLogin({
+      const { data } = (await login({
         variables: {
           email: values.email,
           password: values.password,
         },
       })) as Data;
 
-      if (data.adminLogin.authToken) {
-        clientCookies.set("token", data.adminLogin.authToken);
-        login(data.adminLogin.user.id, data.adminLogin.user.role);
-        window.location.href = "/";
+      if (data.login.authToken && data.login.user.role === "ADMIN") {
+        clientCookies.set("token", data.login.authToken);
+        console.log(data.login.user.id, data.login.user.role);
+        loginState(data.login.user.id, data.login.user.role);
+
+        window.location.href = "/admin";
       }
     } catch (error) {
       console.log(error);

@@ -1,8 +1,5 @@
 import Link from "next/link";
-
-import type { MENU_ITEM_PROPS } from "@/types";
 import { ActivitySquare } from "lucide-react";
-
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -11,6 +8,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@repo/ui/components/ui/navigation-menu";
 
+import type { MENU_ITEM_PROPS } from "@/types";
 import { siteConfig } from "@/config/site-config";
 
 interface MainMenuProps {

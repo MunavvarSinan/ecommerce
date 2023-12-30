@@ -21,7 +21,6 @@ export function VendorsTableShell({
     const [selectedRowIds, setSelectedRowIds] = useState<string[]>([]);
     // TODO : update table types and also add delete functionality
 
-
     const columns = useMemo<ColumnDef<VENDOR_DATA>[]>(
         () => [
             {
@@ -85,7 +84,7 @@ export function VendorsTableShell({
         <DataTable
             columns={columns}
             data={data}
-            // newRowLink={`/dashboard/stores/${}/products/new`}
+            // newRowLink={`/vendors/new`}
             pageCount={pageCount}
 
         // searchableColumns={[

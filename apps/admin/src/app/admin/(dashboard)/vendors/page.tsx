@@ -15,7 +15,8 @@ import { GET_ALL_VENDORS } from "@/lib/graphql/admin/query/admin";
 const pageCount = 3; // Assuming you have 3 pages of data
 
 const Vendors = (): JSX.Element => {
-    const { data } = useSuspenseQuery(GET_ALL_VENDORS) as VENDORS_TYPE;
+    const { data } = useSuspenseQuery(GET_ALL_VENDORS, {
+    }) as VENDORS_TYPE;
 
     return (
         <Shell className="gap-4" variant="sidebar">
@@ -30,7 +31,7 @@ const Vendors = (): JSX.Element => {
                             size: "sm",
                         }),
                     )}
-                    href="/vendors/new"
+                    href="/admin/vendors/new"
                 >
                     Create vendor
                 </Link>

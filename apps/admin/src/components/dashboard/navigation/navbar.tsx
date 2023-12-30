@@ -5,7 +5,6 @@ import { tv, type VariantProps } from "tailwind-variants";
 import MainNav from "@/components/dashboard/navigation/main-nav";
 import { UserNav } from "@/components/dashboard/navigation/user-nav";
 import { ThemesGeneralSwitcher } from "@/components/switchers/themes-general-switcher";
-
 import { siteConfig } from "@/config/site-config";
 
 import { MobileMenu } from "./mobile-menu";
@@ -25,7 +24,7 @@ const NavbarStyles = tv({
   },
 });
 
-export type SiteHeaderProps = {} & VariantProps<typeof NavbarStyles>;
+export type SiteHeaderProps = object & VariantProps<typeof NavbarStyles>;
 
 const Navbar = ({ border = true, sticky = true }): JSX.Element => {
   return (
@@ -38,8 +37,8 @@ const Navbar = ({ border = true, sticky = true }): JSX.Element => {
                 </div>
             </div> */}
       <nav className="container flex justify-between h-16 items-center">
-        <MobileMenu MainMenuItems={siteConfig.mainNav} />
-        <MainNav items={siteConfig.mainNav} />
+        <MobileMenu MainMenuItems={siteConfig.adminNav} />
+        <MainNav items={siteConfig.adminNav} />
         <div className="flex flex-1 items-center justify-end space-x-4">
           <ThemesGeneralSwitcher />
           <UserNav />

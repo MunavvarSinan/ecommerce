@@ -14,14 +14,6 @@ const adminResolvers: Resolvers = {
             await requireAuthorization({ context }, ['ADMIN']);
             return await Admin.createAdmin({ name, phone, email, password });
         },
-        adminLogin: async (_, { email, password }) => {
-            const admin = await Admin.login({ email, password });
-            if (admin) {
-                return admin; // Return the complete Admin object
-            } else {
-                throw new GraphQLError('Invalid login credentials');
-            }
-        },
         createVendor: async (_, { name, email, phone, password, address }, context: GqlContext) => {
             // await requireAuthorization({ context }, ['ADMIN']);
             const vendor = await Admin.createVendor({ name, email, phone, password, address });

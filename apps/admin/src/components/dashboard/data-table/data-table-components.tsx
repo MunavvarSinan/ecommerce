@@ -99,12 +99,12 @@ export default function DataTableActions({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
                 <DropdownMenuItem asChild>
-                    <Link href="/vendors">
+                    <Link href="/admin/vendors">
                         Edit
                     </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                    <Link href={`/product/${item.id}`}>View</Link>
+                    <Link href={`/admin/product/${item.id}`}>View</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem

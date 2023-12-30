@@ -2,21 +2,31 @@ import { GqlContext } from "@/graphql/types";
 import db from "@/modules/db";
 import { Admin, Role, Vendor } from "@prisma/client";
 import { GraphQLError } from "graphql";
-import jwt from "jsonwebtoken";
+import { jwtVerify } from "jose";
 
+import { SignJWT } from "jose";
 interface UserWithIdAndRole {
     id: string;
     role: string;
 }
 
-export function createAuthToken(user: UserWithIdAndRole): string {
-    return jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET as string, {
-        expiresIn: "7d",
-    });
+export function createAuthToken(user: UserWithIdAndRole) {
+    // return jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET as string, {
+    //     expiresIn: "7d",
+    // });
+    const iat = Math.floor(Date.now() / 1000);
+    const exp = iat + 60 * 60 * 24; // 1 day
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET as string);
+    const alg = "HS256";
+    return new SignJWT({ userId: user.id, role: user.role }).setProtectedHeader({ alg, typ: 'JWT' }).setIssuedAt(iat).setExpirationTime(exp).setNotBefore(iat).sign(secret);
 }
 
-export function verifyAuthToken(authToken: string) {
-    const { userId, role } = jwt.verify(authToken, process.env.JWT_SECRET as string) as { userId: string, role: string };
+export async function verifyAuthToken(authToken: string) {
+    // const { userId, role } = jwt.verify(authToken, process.env.JWT_SECRET as string) as { userId: string, role: string };
+    const { payload } = await jwtVerify(authToken, new TextEncoder().encode(process.env.JWT_SECRET as string));
+    console.log(payload);
+    const { role, userId }: { role: string, userId: string } = payload as { role: string, userId: string };
+
     if (!userId || !role) {
         throw new GraphQLError('Invalid auth token');
     }

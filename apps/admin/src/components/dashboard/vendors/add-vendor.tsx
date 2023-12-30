@@ -23,6 +23,7 @@ import { catchError } from "@/utils";
 import { ADD_VENDOR } from "@/lib/graphql/admin/mutation/admin";
 import { Icons } from "@/components/icons";
 import { vendorSchema } from "@/validations/vendor";
+import { GET_ALL_VENDORS } from "@/lib/graphql/admin/query/admin";
 
 type Inputs = z.infer<typeof vendorSchema>;
 
@@ -48,11 +49,13 @@ export const AddVendorForm = (): JSX.Element => {
           variables: {
             ...inputData,
           },
-        });
+          refetchQueries: [{ query: GET_ALL_VENDORS }],
+        })
+
         if (data) {
           form.reset();
           toast.success(`Vendor ${data.name} added successfully`);
-          router.push("/vendors");
+          router.push("/admin/vendors");
           router.refresh();
         } else {
           toast.error("Something went wrong");

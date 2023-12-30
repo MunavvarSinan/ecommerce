@@ -26,7 +26,6 @@ export function ApolloWrapper({
   delay: number;
   token: string;
 }>) {
-  console.log("token", token);
   return (
     <ApolloNextAppProvider makeClient={makeClient}>
       {children}
@@ -69,14 +68,14 @@ export function ApolloWrapper({
     const link =
       typeof window === "undefined"
         ? ApolloLink.from([
-            new SSRMultipartLink({
-              stripDefer: false,
-              cutoffDelay: 100,
-            }),
-            delayLink,
-            authLink,
-            httpLink,
-          ])
+          new SSRMultipartLink({
+            stripDefer: false,
+            cutoffDelay: 100,
+          }),
+          delayLink,
+          authLink,
+          httpLink,
+        ])
         : ApolloLink.from([delayLink, authLink, httpLink]);
 
     return new NextSSRApolloClient({

@@ -11,7 +11,7 @@ export const REPOSITORY_OWNER = "MunavvarSinan";
 export const REPOSITORY_NAME = "ecommerce";
 export const REPOSITORY_URL = "https://github.com/MunavvarSinan/ecommerce";
 // TODO: update store frontend url
-export const baseUrl = "";
+export const baseUrl = "https://test.com";
 
 export const BASE_URL =
   process.env.NODE_ENV === "production" ? baseUrl : "http://localhost:3000";
@@ -28,38 +28,38 @@ export const siteConfig = {
     base: BASE_URL,
     owner: REPOSITORY_OWNER,
   },
-  mainNav: [
+  adminNav: [
     {
       title: "Home",
-      href: "/",
+      href: "/admin",
     },
     {
       title: "vendors",
-      href: "/vendors",
+      href: "/admin/vendors",
     },
     {
       title: "stores",
-      href: "/stores",
+      href: "/admin/stores",
     },
     {
       title: "products",
-      href: "/products",
+      href: "/admin/products",
     },
     {
       title: "orders",
-      href: "/orders",
+      href: "/admin/orders",
     },
     {
       title: "customers",
-      href: "/customers",
+      href: "/admin/customers",
     },
     {
       title: "Profile",
-      href: "/profile",
+      href: "/admin/profile",
     },
     {
       title: "settings",
-      href: "/settings",
+      href: "/admin/settings",
     },
   ],
   links,
