@@ -38,14 +38,18 @@ const startServer = async () => {
     const { url } = await startStandaloneServer(server, {
         listen: { host: '0.0.0.0', port },
         context: async ({ req }) => {
-            // context allow us to access the request coming from client side
-            const authToken = req.headers.authorization?.split(' ')[1];
+            // context allows us to access the request coming from the client side
+            const authToken = req.headers.authorization?.split(' ')[1] || null;
             if (!authToken) {
                 return { currentUser: null, userRoles: [] };
             }
             try {
                 const user = await verifyAuthToken(authToken);
-                return { currentUser: user, userRole: user?.role };
+                if (!user) {
+                    throw new Error('Invalid auth token');
+                }
+                user.passwordHash = '';
+                return { currentUser: user, userRoles: user.role ? [user.role] : [] };
             } catch (error) {
                 throw new GraphQLError('Invalid auth token', { extensions: { code: 'UNAUTHENTICATED' } });
             }

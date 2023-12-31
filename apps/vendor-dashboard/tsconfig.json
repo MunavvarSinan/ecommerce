@@ -1,0 +1,29 @@
+{
+  "exclude": [
+    "node_modules"
+  ],
+  "extends": "@repo/typescript-config/nextjs.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "downlevelIteration": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "tailwind.config.js",
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "../../packages/ui/src/button.tsx",
+    "src/components/dashboard/store/store-modal.tsx"
+  ]
+}

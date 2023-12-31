@@ -24,9 +24,8 @@ export function createAuthToken(user: UserWithIdAndRole) {
 export async function verifyAuthToken(authToken: string) {
     // const { userId, role } = jwt.verify(authToken, process.env.JWT_SECRET as string) as { userId: string, role: string };
     const { payload } = await jwtVerify(authToken, new TextEncoder().encode(process.env.JWT_SECRET as string));
-    console.log(payload);
     const { role, userId }: { role: string, userId: string } = payload as { role: string, userId: string };
-
+    console.log(role, userId);
     if (!userId || !role) {
         throw new GraphQLError('Invalid auth token');
     }
@@ -46,7 +45,9 @@ export const requireAuthorization = async ({ context }: { context: GqlContext },
         throw new GraphQLError('You must be logged in to perform this action');
     }
 
-    if (!allowedRoles.some(role => context.userRole === role)) {
+    if (context.userRoles && allowedRoles.some(role => context.userRoles!.includes(role))) {
+        // User is authorized
+    } else {
         throw new GraphQLError('You are not authorized to perform this action');
     }
 };

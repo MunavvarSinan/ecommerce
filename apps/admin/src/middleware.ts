@@ -8,35 +8,36 @@ export async function middleware(request: NextRequest): Promise<NextResponse> {
   const { pathname } = request.nextUrl;
   const authToken = request.cookies.get("token")?.value;
   const isPublicRoute = pathname === "/sign-in";
-
-  if (authToken) {
-    try {
-      const { payload } = await jwtVerify(authToken, new TextEncoder().encode(process.env.JWT_SECRET!));
-      const { role, exp } = payload;
-      const isExpired = Date.now() >= (exp?.valueOf() ?? 0) * 1000;
-      const allowedRoles: AllowedRoles = {
-        "/admin/*": ["ADMIN"],
-        "/vendor/*": ["VENDOR"],
-      };
-
-      const allowedRolesForPath = allowedRoles[pathname];
-
-      // Check if allowedRolesForPath is defined before using includes
-      if (
-        isExpired ||
-        (!isPublicRoute && !allowedRolesForPath.includes((role as string).toUpperCase()))
-      ) {
-        return NextResponse.redirect(new URL("/unauthorized", request.url));
-      }
-    } catch (error) {
-      // Handle token verification errors (e.g., invalid signature, expired token)
-      return NextResponse.redirect(new URL("/unauthorized", request.url));
-    }
-  } else if (!isPublicRoute) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+  if (!authToken) {
+    // Redirect to sign-in if there's no token
+    return isPublicRoute ? NextResponse.next() : NextResponse.redirect(new URL("/sign-in", request.url));
   }
 
-  return NextResponse.next();
+  try {
+    const { payload } = await jwtVerify(authToken, new TextEncoder().encode(process.env.JWT_SECRET as string));
+    const { role, exp } = payload as { role: string; exp: number };
+    const isExpired = Date.now() >= exp.valueOf() * 1000;
+
+    if (isExpired) {
+      return NextResponse.redirect(new URL("/sign-in", request.url));
+    }
+
+    // Define allowed routes for each role
+    const allowedRoutes: AllowedRoles = {
+      ADMIN: ["/admin"],
+    };
+
+    // Check if the current pathname is allowed for the user's role
+    if (role && allowedRoutes[role].some((allowedRoute) => pathname.startsWith(allowedRoute))) {
+      return NextResponse.next();
+    }
+
+    // Redirect to the appropriate route based on the user's role
+    return NextResponse.redirect(new URL(`/${role.toLowerCase()}/`, request.url));
+  } catch (error) {
+    // Handle token verification errors
+    return NextResponse.redirect(new URL("/unauthorized", request.url));
+  }
 }
 
 export const config = {

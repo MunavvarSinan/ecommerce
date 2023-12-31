@@ -29,10 +29,10 @@ type Store {
 type Query {
   vendor(id: String!): Vendor!
   getAllStores: [Store!]
+  getStore(vendorId: String!, storeId: String): Store
 }
 
 type Mutation {
-  vendorLogin(email: String!, password: String!): AuthResult!
   updateVendor(id: String!, email: String!, phone: String!, password: String!): Vendor!
   deleteVendor(id: String!): Vendor!
   createStore(name: String!, description: String, vendorId: String!): Store!

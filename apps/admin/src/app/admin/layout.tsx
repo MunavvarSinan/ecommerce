@@ -1,7 +1,8 @@
-import HydrationZustand from "@/providers/hydration";
+import HydrationZustand from "@repo/ui/providers/hydration";
+
 import Navbar from "@/components/dashboard/navigation/navbar";
 
-export default function DashboardLayout({
+export default function AdminDashboardLayout({
   children,
 }: {
   children: React.ReactNode;

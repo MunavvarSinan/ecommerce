@@ -1,7 +1,14 @@
+#import Admin from '../admin/schema.graphql'
+#import Vendor from '../vendor/schema.graphql'
 type Mutation {
   login(email: String!, password: String!): AuthPayload
 }
 
+union ME = Admin | Vendor
+
+type Query {
+  me: ME
+}
 type User {
   id: ID!
   role: String!

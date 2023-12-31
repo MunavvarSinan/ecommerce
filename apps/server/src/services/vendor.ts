@@ -64,7 +64,6 @@ class VendorService {
             throw new GraphQLError('Vendor does not exist');
         }
         const slug = await VendorService.generateSlug(name);
-        console.log({ slug });
         const storeExists = await VendorService.storeExists(name);
         if (!storeExists) {
             throw new GraphQLError('Store already exists with that name');
@@ -89,13 +88,23 @@ class VendorService {
 
                 },
             });
-            // return store
         } catch (error) {
             throw new GraphQLError('Error creating store');
         }
     }
     public static async getAllStores() {
         return await db.store.findMany({ include: { vendor: true } });
+    }
+    public static async getStore(vendorId: string, storeId?: string) {
+        return await db.store.findFirst({
+            where: {
+                id: storeId,
+                vendorId: vendorId,
+            },
+            include: {
+                vendor: true,
+            },
+        });
     }
 }
 

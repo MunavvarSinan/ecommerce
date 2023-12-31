@@ -1,6 +1,6 @@
 "use client";
 
-import { userStore } from "@/lib/store/store";
+import { userStore } from "@/lib/store/user";
 
 export default function Page(): JSX.Element {
   const { user } = userStore();

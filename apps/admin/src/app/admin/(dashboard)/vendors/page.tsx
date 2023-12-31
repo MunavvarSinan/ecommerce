@@ -5,10 +5,10 @@ import Link from "next/link";
 import { useSuspenseQuery } from "@apollo/client";
 import { buttonVariants } from "@repo/ui/components/ui/button";
 import { cn } from "@repo/ui/lib/utils";
+import { PageHeaderHeading } from "@repo/ui/components/ui/page-header";
+import { Shell } from "@repo/ui/components/ui/shell-variants";
 
 import { VendorsTableShell } from "@/components/dashboard/vendors/vendors-table";
-import { Shell } from "@/components/shell-variants";
-import { PageHeaderHeading } from "@/components/ui/page-header";
 import { type VENDORS_TYPE } from "@/types";
 import { GET_ALL_VENDORS } from "@/lib/graphql/admin/query/admin";
 

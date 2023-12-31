@@ -71,6 +71,8 @@ export type Image = {
   url: Scalars['String']['output'];
 };
 
+export type Me = Admin | Vendor;
+
 export type Mutation = {
   __typename?: 'Mutation';
   createAdmin: Admin;
@@ -80,7 +82,6 @@ export type Mutation = {
   deleteVendor: Vendor;
   login?: Maybe<AuthPayload>;
   updateVendor: Vendor;
-  vendorLogin: AuthResult;
 };
 
 
@@ -130,12 +131,6 @@ export type MutationUpdateVendorArgs = {
   id: Scalars['String']['input'];
   password: Scalars['String']['input'];
   phone: Scalars['String']['input'];
-};
-
-
-export type MutationVendorLoginArgs = {
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
 };
 
 export type Order = {
@@ -193,8 +188,10 @@ export type Query = {
   getAdmin: Admin;
   getAdmins: Array<Admin>;
   getAllStores?: Maybe<Array<Store>>;
+  getStore?: Maybe<Store>;
   getVendor: Vendor;
   getVendors: Array<Vendor>;
+  me?: Maybe<Me>;
   vendor: Vendor;
 };
 
@@ -202,6 +199,12 @@ export type Query = {
 export type QueryGetAdminArgs = {
   id: Scalars['ID']['input'];
   role: Scalars['String']['input'];
+};
+
+
+export type QueryGetStoreArgs = {
+  storeId?: InputMaybe<Scalars['String']['input']>;
+  vendorId: Scalars['String']['input'];
 };
 
 
@@ -331,6 +334,10 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+/** Mapping of union types */
+export type ResolversUnionTypes<RefType extends Record<string, unknown>> = ResolversObject<{
+  ME: ( Admin ) | ( Vendor );
+}>;
 
 
 /** Mapping between all available schema types and the resolvers types */
@@ -346,6 +353,7 @@ export type ResolversTypes = ResolversObject<{
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Image: ResolverTypeWrapper<Image>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  ME: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['ME']>;
   Mutation: ResolverTypeWrapper<{}>;
   Order: ResolverTypeWrapper<Order>;
   OrderItem: ResolverTypeWrapper<OrderItem>;
@@ -373,6 +381,7 @@ export type ResolversParentTypes = ResolversObject<{
   ID: Scalars['ID']['output'];
   Image: Image;
   Int: Scalars['Int']['output'];
+  ME: ResolversUnionTypes<ResolversParentTypes>['ME'];
   Mutation: {};
   Order: Order;
   OrderItem: OrderItem;
@@ -445,6 +454,10 @@ export type ImageResolvers<ContextType = any, ParentType extends ResolversParent
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type MeResolvers<ContextType = any, ParentType extends ResolversParentTypes['ME'] = ResolversParentTypes['ME']> = ResolversObject<{
+  __resolveType: TypeResolveFn<'Admin' | 'Vendor', ParentType, ContextType>;
+}>;
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   createAdmin?: Resolver<ResolversTypes['Admin'], ParentType, ContextType, RequireFields<MutationCreateAdminArgs, 'email' | 'name' | 'password' | 'phone'>>;
   createCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'name'>>;
@@ -453,7 +466,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<MutationDeleteVendorArgs, 'id'>>;
   login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   updateVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<MutationUpdateVendorArgs, 'email' | 'id' | 'password' | 'phone'>>;
-  vendorLogin?: Resolver<ResolversTypes['AuthResult'], ParentType, ContextType, RequireFields<MutationVendorLoginArgs, 'email' | 'password'>>;
 }>;
 
 export type OrderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order']> = ResolversObject<{
@@ -502,8 +514,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getAdmin?: Resolver<ResolversTypes['Admin'], ParentType, ContextType, RequireFields<QueryGetAdminArgs, 'id' | 'role'>>;
   getAdmins?: Resolver<Array<ResolversTypes['Admin']>, ParentType, ContextType>;
   getAllStores?: Resolver<Maybe<Array<ResolversTypes['Store']>>, ParentType, ContextType>;
+  getStore?: Resolver<Maybe<ResolversTypes['Store']>, ParentType, ContextType, RequireFields<QueryGetStoreArgs, 'vendorId'>>;
   getVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<QueryGetVendorArgs, 'id'>>;
   getVendors?: Resolver<Array<ResolversTypes['Vendor']>, ParentType, ContextType>;
+  me?: Resolver<Maybe<ResolversTypes['ME']>, ParentType, ContextType>;
   vendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<QueryVendorArgs, 'id'>>;
 }>;
 
@@ -564,6 +578,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Color?: ColorResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Image?: ImageResolvers<ContextType>;
+  ME?: MeResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Order?: OrderResolvers<ContextType>;
   OrderItem?: OrderItemResolvers<ContextType>;

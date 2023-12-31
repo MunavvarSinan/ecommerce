@@ -1,8 +1,8 @@
 import { Role } from "@prisma/client";
 
-import { Vendor } from "@/generated/graphql"
+import { Admin, Vendor } from "@/generated/graphql"
 
 export type GqlContext = {
-    currentUser: Vendor | null;
-    userRole: Role | null;
+    currentUser: Vendor | Admin | null;
+    userRoles: Role | null;
 }

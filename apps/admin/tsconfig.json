@@ -15,9 +15,6 @@
       "@/*": [
         "./src/*"
       ],
-      "@ui/*": [
-        "../../packages/ui/src/*"
-      ]
     }
   },
   "include": [
@@ -26,6 +23,8 @@
     "tailwind.config.js",
     "next-env.d.ts",
     ".next/types/**/*.ts",
-    "../../packages/ui/src/button.tsx"
+    "../../packages/ui/src/button.tsx",
+    "src/components/dashboard/store/store-modal.tsx",
+    "../../packages/ui/components/ui/shell-variants.tsx"
   ]
 }

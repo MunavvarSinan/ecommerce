@@ -1,6 +1,5 @@
 "use client";
 
-import { redirect } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -8,15 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/ui/card";
-
-import { AddVendorForm } from "@/components/dashboard/vendors/add-vendor";
-import { Shell } from "@/components/shell-variants";
+import { redirect } from "next/navigation";
+import { Shell } from "@repo/ui/components/ui/shell-variants";
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/ui/page-header";
-import { userStore } from "@/lib/store/store";
+} from "@repo/ui/components/ui/page-header";
+
+import { AddVendorForm } from "@/components/dashboard/vendors/add-vendor";
+import { userStore } from "@/lib/store/user";
 
 export default function NewStorePage(): JSX.Element {
   const { user } = userStore();

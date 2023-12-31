@@ -3,6 +3,8 @@ import { GraphQLError } from 'graphql';
 import { Resolvers } from '@/generated/graphql';
 import db from '@/modules/db';
 import VendorService from '@/services/vendor';
+import { requireAuthorization } from '@/utils/auth';
+import { GqlContext } from '../types';
 
 
 const vendorResolver: Resolvers = {
@@ -16,7 +18,8 @@ const vendorResolver: Resolvers = {
 
             return foundVendor;
         },
-        getAllStores: async () => {
+        getAllStores: async (_, __, context: GqlContext) => {
+            await requireAuthorization({ context }, ['ADMIN', 'VENDOR']);
             const stores = await VendorService.getAllStores();
             if (stores) {
                 return stores;
@@ -24,24 +27,16 @@ const vendorResolver: Resolvers = {
                 throw new GraphQLError('No stores found');
 
             }
+        },
+        getStore: async (_, { vendorId, storeId }, context: GqlContext) => {
+            await requireAuthorization({ context }, ['ADMIN', 'VENDOR']);
+            const store = await VendorService.getStore(vendorId, storeId as string);
+            return store;
         }
     },
     Mutation: {
-        vendorLogin: async (_, { email, password }) => {
-            const vendor = await VendorService.login({ email, password });
-            if (vendor) {
-                return vendor;
-            } else {
-                throw new GraphQLError('Invalid login credentials');
-            }
-        },
         createStore: async (_, { name, description, vendorId }) => {
-            try {
-                return await VendorService.createStore({ name, description, vendorId });
-
-            } catch (error) {
-                throw new GraphQLError('Error creating store');
-            }
+            return await VendorService.createStore({ name, description, vendorId });
         }
     }
 }
