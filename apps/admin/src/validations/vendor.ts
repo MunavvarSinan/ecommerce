@@ -15,3 +15,4 @@ export const vendorSchema = z.object({
     .string()
     .min(10, { message: "Address must be at least 10 characters long" }),
 });
+

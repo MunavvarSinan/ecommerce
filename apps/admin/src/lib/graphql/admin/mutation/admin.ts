@@ -26,3 +26,41 @@ export const ADD_VENDOR = gql`
     }
   }
 `;
+
+export const CREATE_CATEGORY = gql`
+mutation($name: String!, $parentId: String){
+  createCategory(name: $name, parentId: $parentId) {
+    name
+    id
+    parentId
+    isActive
+    description
+    subcategories {
+      id
+      name
+      parentId
+      isActive
+      description
+    }
+  }
+}
+`
+
+export const DELETE_CATEGORY = gql`
+mutation($id: String!){
+  deleteCategory(id: $id) {
+    name
+    id
+    parentId
+    isActive
+    description
+    subcategories {
+      id
+      name
+      parentId
+      isActive
+      description
+    }
+  }
+}
+`

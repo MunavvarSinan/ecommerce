@@ -20,7 +20,6 @@ export function VendorsTableShell({
 }: ProductsTableShellProps): JSX.Element {
     const [selectedRowIds, setSelectedRowIds] = useState<string[]>([]);
     // TODO : update table types and also add delete functionality
-
     const columns = useMemo<ColumnDef<VENDOR_DATA>[]>(
         () => [
             {
@@ -73,7 +72,7 @@ export function VendorsTableShell({
             {
                 id: "actions",
                 cell: ({ row }) => (
-                    <DataTableActions row={row} />
+                    <DataTableActions component='vendors' row={row} />
                 )
             }
         ],

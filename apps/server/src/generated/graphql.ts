@@ -42,11 +42,13 @@ export type AuthResult = {
 export type Category = {
   __typename?: 'Category';
   createdAt: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
-  name: Scalars['String']['output'];
+  isActive: Scalars['Boolean']['output'];
+  name?: Maybe<Scalars['String']['output']>;
   parent?: Maybe<Category>;
   parentId?: Maybe<Scalars['String']['output']>;
-  products: Array<Product>;
+  products?: Maybe<Array<Product>>;
   subcategories?: Maybe<Array<Category>>;
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -79,8 +81,10 @@ export type Mutation = {
   createCategory: Category;
   createStore: Store;
   createVendor: Vendor;
+  deleteCategory: Category;
   deleteVendor: Vendor;
   login?: Maybe<AuthPayload>;
+  updateCategory: Category;
   updateVendor: Vendor;
 };
 
@@ -94,8 +98,9 @@ export type MutationCreateAdminArgs = {
 
 
 export type MutationCreateCategoryArgs = {
+  description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
-  products?: InputMaybe<Array<ProductInput>>;
+  parentId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -115,6 +120,11 @@ export type MutationCreateVendorArgs = {
 };
 
 
+export type MutationDeleteCategoryArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
 export type MutationDeleteVendorArgs = {
   id: Scalars['String']['input'];
 };
@@ -123,6 +133,14 @@ export type MutationDeleteVendorArgs = {
 export type MutationLoginArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+
+export type MutationUpdateCategoryArgs = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  parentId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -188,6 +206,8 @@ export type Query = {
   getAdmin: Admin;
   getAdmins: Array<Admin>;
   getAllStores?: Maybe<Array<Store>>;
+  getCategories: Array<Category>;
+  getCategory: Category;
   getStore?: Maybe<Store>;
   getVendor: Vendor;
   getVendors: Array<Vendor>;
@@ -199,6 +219,11 @@ export type Query = {
 export type QueryGetAdminArgs = {
   id: Scalars['ID']['input'];
   role: Scalars['String']['input'];
+};
+
+
+export type QueryGetCategoryArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -420,11 +445,13 @@ export type AuthResultResolvers<ContextType = any, ParentType extends ResolversP
 
 export type CategoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Category'] = ResolversParentTypes['Category']> = ResolversObject<{
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  isActive?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   parent?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType>;
   parentId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  products?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
+  products?: Resolver<Maybe<Array<ResolversTypes['Product']>>, ParentType, ContextType>;
   subcategories?: Resolver<Maybe<Array<ResolversTypes['Category']>>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -463,8 +490,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'name'>>;
   createStore?: Resolver<ResolversTypes['Store'], ParentType, ContextType, RequireFields<MutationCreateStoreArgs, 'name' | 'vendorId'>>;
   createVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<MutationCreateVendorArgs, 'address' | 'email' | 'name' | 'password' | 'phone'>>;
+  deleteCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationDeleteCategoryArgs, 'id'>>;
   deleteVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<MutationDeleteVendorArgs, 'id'>>;
   login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
+  updateCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<MutationUpdateCategoryArgs, 'id'>>;
   updateVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<MutationUpdateVendorArgs, 'email' | 'id' | 'password' | 'phone'>>;
 }>;
 
@@ -514,6 +543,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getAdmin?: Resolver<ResolversTypes['Admin'], ParentType, ContextType, RequireFields<QueryGetAdminArgs, 'id' | 'role'>>;
   getAdmins?: Resolver<Array<ResolversTypes['Admin']>, ParentType, ContextType>;
   getAllStores?: Resolver<Maybe<Array<ResolversTypes['Store']>>, ParentType, ContextType>;
+  getCategories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType>;
+  getCategory?: Resolver<ResolversTypes['Category'], ParentType, ContextType, RequireFields<QueryGetCategoryArgs, 'id'>>;
   getStore?: Resolver<Maybe<ResolversTypes['Store']>, ParentType, ContextType, RequireFields<QueryGetStoreArgs, 'vendorId'>>;
   getVendor?: Resolver<ResolversTypes['Vendor'], ParentType, ContextType, RequireFields<QueryGetVendorArgs, 'id'>>;
   getVendors?: Resolver<Array<ResolversTypes['Vendor']>, ParentType, ContextType>;

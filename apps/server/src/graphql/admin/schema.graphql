@@ -17,10 +17,13 @@ input ProductInput {
   quantity: Int!
   image: String!
 }
+
 type Mutation {
   createVendor(name: String!, email: String!, phone: String!, password: String!, address: String!): Vendor!
   createAdmin(name: String!, phone: String!, email: String!, password: String!): Admin!
-  createCategory(name: String!, products: [ProductInput!]): Category!
+  createCategory(name: String!, parentId: String, description: String): Category!
+  updateCategory(id: ID!, name: String, parentId: String, description: String): Category!
+  deleteCategory(id: ID!): Category!
 }
 
 type Query {
@@ -28,6 +31,8 @@ type Query {
   getAdmin(id: ID!, role: String!): Admin!
   getVendors: [Vendor!]!
   getVendor(id: ID!): Vendor!
+  getCategories: [Category!]!
+  getCategory(id: ID!): Category!
   #   getCategories: [Category!]!
   #   getCategory(id: ID!): Category!
   #   getStores: [Store!]!

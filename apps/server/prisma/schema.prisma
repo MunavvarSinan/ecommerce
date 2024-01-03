@@ -42,7 +42,7 @@ model Vendor {
 model Store {
   id          String   @id
   name        String
-  vendorId    String   
+  vendorId    String
   description String?
   slug        String?
   createdAt   DateTime @default(now())
@@ -51,9 +51,9 @@ model Store {
   vendor   Vendor    @relation("VendorToStore", fields: [vendorId], references: [id])
   products Product[]
   orders   Order[]   @relation("OrderToStore")
-  
-  @@map("stores")
+
   @@index([vendorId])
+  @@map("stores")
 }
 
 model Admin {
@@ -82,6 +82,8 @@ model Category {
   parentId      String?
   parent        Category?  @relation("Subcategories", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   subcategories Category[] @relation("Subcategories")
+  isActive      Boolean    @default(false)
+  description   String?
 
   products Product[]
 

@@ -33,6 +33,10 @@ export type ProductsTableShellProps = {
   data: VENDOR_DATA[];
   pageCount: number;
 };
+export interface CategoriesTableProps {
+  data: CATEGORIES_DATA[];
+  pageCount: number;
+}
 
 export interface VENDOR_DATA {
   email: string;
@@ -55,6 +59,38 @@ export type VENDORS_TYPE = {
   };
 };
 
+export interface GET_CATEGORY_TYPE {
+  data: {
+    getCategory: CATEGORIES_DATA;
+  };
+}
+export interface CATEGORIES_DATA {
+  id: string;
+  name: string;
+  parentId: string | null;
+  isActive: boolean;
+  description: string | null;
+  subcategories: CATEGORIES_DATA[];
+}
+
+export interface DETETE_CATEGORY_TYPE {
+  data: {
+    deleteCategory: CATEGORIES_DATA;
+  };
+}
+
+export type CATEGORIES_TYPE = {
+  data: {
+    getCategories: CATEGORIES_DATA[];
+  };
+};
+
+export type ADD_CATEGORY_TYPE = {
+  data: {
+    createCategory: CATEGORIES_DATA;
+  };
+}
+
 export type USER_DATA = {
   data: {
     me: {
@@ -75,5 +111,5 @@ export interface CheckboxHeaderProps {
   // Type for the setSelectedRowIds function
   setSelectedRowIds: (ids: string[]) => void;
   // Type for the data array (optional)
-  data: VENDOR_DATA[];
+  data: VENDOR_DATA[] | CATEGORIES_DATA[];
 }

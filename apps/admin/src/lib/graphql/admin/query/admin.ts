@@ -28,3 +28,41 @@ export const GET_ALL_VENDORS = gql`
     }
   }
 `;
+
+export const GET_ALL_CATEGORIES = gql`
+query{
+  getCategories {
+    name
+    id
+    parentId
+    isActive
+    description
+    subcategories {
+      name
+      id
+      parentId
+      isActive
+      description
+    }
+  }
+}
+`;
+
+export const GET_CATEGORY = gql`
+query($categoryId: ID!){
+  getCategory(id: $categoryId) {
+    name
+    id
+    parentId
+    isActive
+    description
+    subcategories {
+      name
+      id
+      parentId
+      isActive
+      description
+    }
+  }
+}
+`;

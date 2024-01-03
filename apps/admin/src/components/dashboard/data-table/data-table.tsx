@@ -32,7 +32,7 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { DataTablePagination } from "@/components/dashboard/data-table/data-table-pagination";
 import { DataTableToolbar } from "@/components/dashboard/data-table/data-table-toolbar";
 
-type DataTableProps<TData, TValue> = {
+interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   pageCount: number;
@@ -56,15 +56,15 @@ export function DataTable<TData, TValue>({
   const searchParams = useSearchParams();
 
   // Search params
-  const page = searchParams?.get("page") ?? "1";
-  const per_page = searchParams?.get("per_page") ?? "10";
-  const sort = searchParams?.get("sort");
+  const page = searchParams.get("page") ?? "1";
+  const perPage = searchParams.get("per_page") ?? "10";
+  const sort = searchParams.get("sort");
   const [column, order] = sort?.split(".") ?? [];
 
   // Create query string
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
-      const newSearchParams = new URLSearchParams(searchParams?.toString());
+      const newSearchParams = new URLSearchParams(searchParams.toString());
 
       for (const [key, value] of Object.entries(params)) {
         if (value === null) {
@@ -91,7 +91,7 @@ export function DataTable<TData, TValue>({
   const [{ pageIndex, pageSize }, setPagination] =
     React.useState<PaginationState>({
       pageIndex: Number(page) - 1,
-      pageSize: Number(per_page),
+      pageSize: Number(perPage),
     });
 
   const pagination = React.useMemo(
@@ -105,15 +105,15 @@ export function DataTable<TData, TValue>({
   React.useEffect(() => {
     setPagination({
       pageIndex: Number(page) - 1,
-      pageSize: Number(per_page),
+      pageSize: Number(perPage),
     });
-  }, [page, per_page]);
+  }, [page, perPage]);
 
   React.useEffect(() => {
     router.push(
       `${pathname}?${createQueryString({
         page: pageIndex + 1,
-        per_page: pageSize,
+        perPage: pageSize,
       })}`,
       {
         scroll: false,
@@ -260,7 +260,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="w-full space-y-3 overflow-auto">
+    <div className="w-full space-y-3 overflow-auto ">
       <DataTableToolbar
         table={table}
         filterableColumns={filterableColumns}
@@ -268,7 +268,7 @@ export function DataTable<TData, TValue>({
         newRowLink={newRowLink}
         deleteRowsAction={deleteRowsAction}
       />
-      <div className="rounded-md border">
+      <div className="rounded-md border bg-[#f4d4f5] dark:bg-[#ebaedf] dark:text-black uppercase font-normal leading-tight">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

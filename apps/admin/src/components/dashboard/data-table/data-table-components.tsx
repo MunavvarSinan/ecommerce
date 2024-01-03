@@ -56,11 +56,13 @@ export const CheckboxHeader = ({ table, setSelectedRowIds, data }: CheckboxHeade
 }
 
 interface DataTableActionsMenuProps {
-    row: Row; // Replace with specific type based on data structure
+    row: Row;
+    component: string;
 };
 
 export default function DataTableActions({
     row,
+    component,
 }: DataTableActionsMenuProps): JSX.Element {
     const { original: item } = row;
     const [isPending, startTransition] = useTransition();
@@ -99,12 +101,9 @@ export default function DataTableActions({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
                 <DropdownMenuItem asChild>
-                    <Link href="/admin/vendors">
+                    <Link href={`/admin/${component}/${item.id}`}>
                         Edit
                     </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                    <Link href={`/admin/product/${item.id}`}>View</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem

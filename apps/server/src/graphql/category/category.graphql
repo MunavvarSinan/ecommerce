@@ -3,11 +3,13 @@ scalar DateTime
 
 type Category {
   id: String!
-  name: String!
+  name: String
   parentId: String
   parent: Category
   subcategories: [Category!]
-  products: [Product!]!
+  isActive: Boolean!
+  description: String
+  products: [Product!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }

@@ -22,23 +22,7 @@ class Admin {
             data: { id, name, email, phone, passwordHash },
         });
     }
-    public static async login({ email, password }: { email: string, password: string }) {
-        const foundAdmin = await Admin.getAdminByEmail(email);
-        if (!foundAdmin) {
-            throw new GraphQLError(`Email/Password combination is incorrect`);
-        }
 
-        const isPasswordCorrect = await bcrypt.compare(password, foundAdmin.passwordHash);
-
-        if (!isPasswordCorrect) {
-            throw new GraphQLError('Email/Password combination is incorrect');
-        }
-        const user = {
-            id: foundAdmin.id,
-            role: foundAdmin.role,
-        }
-        return { authToken: createAuthToken(foundAdmin), user };
-    }
     public static async createVendor({ name, email, password, phone, address }: CreateVendorInput) {
         const foundVendor = await Admin.getAdminByEmail(email);
         if (foundVendor) {
@@ -50,6 +34,103 @@ class Admin {
             data: { id: genId(), name, email, phone, passwordHash, address },
         });
     }
+    public static async createCategory({ name, parentId, description }: { name: string, parentId?: string | null, description?: string }) {
+        try {
+            // Generate a unique ID, handling potential collisions
+            const uniqueId = genId()
+            const createdCategory = await db.category.create({
+                data: {
+                    id: uniqueId,
+                    name,
+                    parentId: parentId || undefined,
+                    description: description || undefined,
+                },
+            });
+
+            if (parentId) {
+                const updatedParentCategory = await db.category.update({
+                    where: { id: parentId },
+                    data: {
+                        subcategories: {
+                            connect: { id: uniqueId },
+                        },
+                    },
+                });
+            }
+
+            return { createdCategory };
+        } catch (error) {
+            // Handle errors gracefully, logging or re-throwing as appropriate
+            console.error('Error creating category:', error);
+            throw error;
+        }
+    }
+    public static async updateCategory({ id, name, parentId, description }: { id: string, name?: string | null, parentId?: string | null, description?: string | null }) {
+        try {
+            let updatedCategory;
+
+            if (parentId) {
+                // If parentId is provided, update the subcategory
+                updatedCategory = await db.category.update({
+                    where: { id },
+                    data: {
+                        name: name || undefined,
+                        parentId: parentId || undefined,
+                        description: description || undefined,
+                    },
+                    include: { subcategories: true },
+                });
+            } else {
+                // If parentId is not provided, update the parent category
+                updatedCategory = await db.category.update({
+                    where: { id },
+                    data: {
+                        name: name || undefined,
+                        description: description || undefined,
+                    },
+                });
+            }
+
+            return { updatedCategory };
+        } catch (error) {
+            // Handle errors gracefully, logging or re-throwing as appropriate
+            console.error('Error updating category:', error);
+            throw error;
+        }
+    }
+
+    public static async deleteCategory({ id }: { id: string }) {
+        try {
+            const category = await db.category.findUnique({ where: { id } });
+
+            if (!category) {
+                return { error: 'Category not found' };
+            }
+
+            if (category.parentId === null) {
+                // Delete parent category and all subcategories
+                await db.category.deleteMany({
+                    where: {
+                        id: {
+                            in: [id, ...(await db.category.findMany({ where: { parentId: id } })).map((sub) => sub.id)],
+                        },
+                    },
+                });
+            } else {
+                // Delete individual subcategory
+                await db.category.delete({ where: { id } });
+            }
+
+            return { deletedCategory: category };
+        } catch (error) {
+            console.error('Error deleting category:', error);
+            throw error;
+        }
+    }
+    public static async getCategories() {
+        return await db.category.findMany({ where: { parentId: null }, include: { subcategories: true } }); // Retrieve only top-level categories
+    }
+
     public static async getAdmins() {
         return await db.admin.findMany();
     }
@@ -64,6 +145,9 @@ class Admin {
                 }
             }
         });
+    }
+    public static async getCategoryById(id: string) {
+        return await db.category.findUnique({ where: { id }, include: { subcategories: { include: { subcategories: true } } } });
     }
 }
 
