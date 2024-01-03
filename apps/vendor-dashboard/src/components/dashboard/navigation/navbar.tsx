@@ -75,7 +75,7 @@ const Navbar = ({ border = true, sticky = true }: NavbarProps): JSX.Element => {
     <header className={NavbarStyles({ border, sticky })}>
       <nav className="container flex justify-between h-16 items-center">
         <MobileMenu MainMenuItems={routes} dashboardName="Vendor Dashboard" />
-        <MainNav items={routes} />
+        <MainNav dashboardName="Vendor Dashboard" items={routes} />
         <div className="flex flex-1 items-center justify-end space-x-4">
           <StoreSwitcher items={data.getAllStores} />
           <ThemesGeneralSwitcher />

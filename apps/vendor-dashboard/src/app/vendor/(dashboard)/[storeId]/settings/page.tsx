@@ -5,7 +5,7 @@ import { GET_STORE } from "@/lib/graphql/query";
 import { userStore } from "@/lib/store/user";
 import { useSuspenseQuery } from "@apollo/client";
 import React from "react";
-import { SettingsForm } from "./components/settings-form";
+import { SettingsForm } from "../../../../../components/dashboard/settings-form";
 import { Shell } from "@repo/ui/components/ui/shell-variants";
 import { PageHeader, PageHeaderDescription, PageHeaderHeading } from "@repo/ui/components/ui/page-header";
 import { buttonVariants } from "@repo/ui/components/ui/button";
@@ -32,8 +32,8 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ params }): JSX.Element => {
   return (
     <Shell variant="sidebar">
       <PageHeader
-        aria-labelledby="dashboard-stores-page-header-heading"
-        id="dashboard-stores-page-header"
+        aria-labelledby="dashboard-settings-page-header-heading"
+        id="dashboard-settings-page-header"
       >
         <div className="flex space-x-4">
           <PageHeaderHeading className="flex-1" size="sm">
