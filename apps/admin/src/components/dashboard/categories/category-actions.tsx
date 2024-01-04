@@ -37,7 +37,8 @@ export const CategoryActions: React.FC<ActionProps> = ({
       const { data } = await deleteCategory({
         variables: {
           categoryId
-        }
+        },
+        refetchQueries: ["GET_CATEGORIES"]
       }) as DETETE_CATEGORY_TYPE;
 
       if (data.deleteCategory) {
@@ -47,7 +48,8 @@ export const CategoryActions: React.FC<ActionProps> = ({
       t.success(`Category ${data.deleteCategory.name} deleted successfully`);
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      // TODO: pass correct error from the backend
+      t.error("Something went wrong");
     }
   };
   return (

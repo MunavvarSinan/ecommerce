@@ -47,20 +47,11 @@ mutation($name: String!, $parentId: String){
 `
 
 export const DELETE_CATEGORY = gql`
-mutation($id: String!){
-  deleteCategory(id: $id) {
+mutation($categoryId: ID!){
+  deleteCategory(id: $categoryId) {
     name
     id
     parentId
-    isActive
-    description
-    subcategories {
-      id
-      name
-      parentId
-      isActive
-      description
-    }
   }
 }
 `
